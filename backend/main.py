@@ -9,10 +9,10 @@ app = socketio.WSGIApp(sio, static_files={
 @sio.event
 def connect(sid, environ):
     # Create room (will be created from the py frontend)
-    tempRoomId = "kareljaromir123"
-    sio.enter_room(sid, tempRoomId)
+    # tempRoomId = "kareljaromir123"
+    # sio.enter_room(sid, tempRoomId)
     
-    print('connect ')
+    print('connect server')
 
 @sio.event
 def my_message(sid, data):
@@ -41,6 +41,15 @@ def roomConnect(sid, data):
     sio.save_session(sid, {"userName": userName})
 
     # Send success message to user
+
+
+# ADMIN
+@sio.on("adminInit")
+def adminInit(sid):
+    print("Admin connected")
+    sio.save_session(sid, {"role": "admin"})
+
+
 
 
 if __name__ == '__main__':

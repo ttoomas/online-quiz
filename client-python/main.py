@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import messagebox
- 
+from socketConnect import defaultConnect, closeConnection
+
+defaultConnect()
+
 # Data o kvízech
 quizes = [
     {"title": "Kvíz jedna", "desc": "popis", "id": "ksdljflūkajkfsd"},
@@ -56,6 +59,13 @@ root.grid_columnconfigure(3, weight=3)
 root.grid_columnconfigure(4, weight=1)
 root.grid_columnconfigure(5, weight=1)
  
+ 
+# Uzavření spojení
+def closeWindow():
+    closeConnection()
+    root.destroy()
+
+root.protocol("WM_DELETE_WINDOW", closeWindow)
+
 # Spuštění hlavní smyčky aplikace
 root.mainloop()
- 
