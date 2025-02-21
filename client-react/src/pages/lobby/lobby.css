@@ -1,4 +1,4 @@
-.uvodnistranka {
+.lobby {
    
     display: flex;
     align-items: center;
@@ -6,11 +6,6 @@
     flex-direction: column;
     height: 80vh;
 }
-
-.enter{
-    margin-top: 1em;
-}
-
-h3{
-    text-align: center;
+.p-datatable th, .p-datatable td {
+    text-align: center; /* Centers both header and body cells */
 }
