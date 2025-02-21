@@ -15,6 +15,10 @@ def init():
     @sio.event
     def disconnect():
         print('disconnected from server')
+    
+    @sio.on('quizCreated')
+    def on_quiz_created():
+        print('Quiz room created')
 
 
     sio.connect('http://localhost:5000')
@@ -33,8 +37,13 @@ def getSio():
     return SIO
 
 def defaultConnect():
-    sio = getSio()
+    getSio()
 
 def closeConnection():
     sio = getSio()
     sio.disconnect()
+
+# Join room
+def createQuiz(quizId):
+    sio = getSio()
+    sio.emit('createQuiz', {"quizId": quizId})

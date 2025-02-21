@@ -1,15 +1,12 @@
 import tkinter as tk
 from tkinter import messagebox
-from socketConnect import defaultConnect, closeConnection
+from socketConnect import defaultConnect, closeConnection, createQuiz
 
 defaultConnect()
 
 # Data o kvízech
 quizes = [
-    {"title": "Kvíz jedna", "desc": "popis", "id": "ksdljflūkajkfsd"},
-    {"title": "Kvíz asdf", "desc": "asdf", "id": "asdf"},
-    {"title": "Kvíz tři", "desc": "nový popis", "id": "novy_id"},
-   
+    {"title": "Kvíz jedna", "desc": "popis", "id": "id-123"},
 ]
  
 # Funkce, která se spustí při kliknutí na tlačítko ve formě odkazu
@@ -23,7 +20,7 @@ def create_quiz():
 # Vytvoření hlavního okna
 root = tk.Tk()
 root.title("Moje aplikace")
-root.geometry("1920x1080")  # Nastavení velikosti okna
+root.geometry("500x500")  # Nastavení velikosti okna
  
 # Nadpis "Text"
 title_label = tk.Label(root, text="Výběr kvízu", font=("Arial", 32, "bold"))
@@ -48,7 +45,7 @@ for index, quiz in enumerate(quizes):
     label_desc.pack(anchor="center", pady=5)
  
     link_button = tk.Button(frame, text=f"Klikněte na odkaz {index + 1}", fg="white", bg="black", bd=0, font=("Arial", 12),
-                            command=lambda q=quiz: on_link_click(q["id"]))
+                            command=lambda q=quiz: createQuiz(q["id"]))
     link_button.pack(side="bottom", anchor="center", pady=10)
  
 # Nastavení flexibilní šířky sloupců
