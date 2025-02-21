@@ -3,6 +3,8 @@ from tkinter import messagebox
 from show_quiz import main_page
 from hide_page import empty_page
 from hide_page import hide_main_page
+from waiting import add_users
+
 
 # pro testování, potom to čapneš z db
 quizes = [
@@ -18,6 +20,7 @@ root.title("Moje aplikace")
 root.geometry("1920x1080")
 
 #empty_page(root)
+
 main_page(root, quizes)
 #hide_main_page(root)
 root.mainloop()

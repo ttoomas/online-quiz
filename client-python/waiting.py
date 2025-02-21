@@ -4,6 +4,8 @@ import tkinter as tk
 from tkinter import messagebox
 
 
+
+   
 def on_link_click(root, link_name):
     # Funkce pro zobrazení čekací obrazovky
     for widget in root.winfo_children():
@@ -13,7 +15,7 @@ def on_link_click(root, link_name):
     tk.Label(root, text="Čekání na uživatele", font=("Arial", 16, "bold")).grid(row=0, column=0, pady=20)
 
     # Seznam uživatelů
-    users = ["pepa", "pavel", "pepik"]
+    users=[]
     
     # Vypsání seznamu uživatelů
     users_listbox = tk.Listbox(root, height=10, width=40)
@@ -27,5 +29,4 @@ def on_link_click(root, link_name):
 
     tk.Button(root, text="Start", command=start_quiz, font=("Arial", 14), bg="green", fg="white").grid(row=2, column=0, pady=20)
 
-    # Tlačítko pro návrat na hlavní stránku
-    tk.Button(root, text="Zpět na hlavní stránku", command=lambda: main_page(root)).grid(row=3, column=0, pady=20)
+   
