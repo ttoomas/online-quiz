@@ -1,1 +1,5 @@
+<<<<<<< HEAD:socket-testing/client-python/requirements.txt
 python-socketio[client]
+=======
+python-tk
+>>>>>>> main:client-python/requirements.txt
