@@ -1,61 +1,36 @@
 import tkinter as tk
-from tkinter import messagebox
- 
-# Data o kvízech
-quizes = [
-    {"title": "Kvíz jedna", "desc": "popis", "id": "ksdljflūkajkfsd"},
-    {"title": "Kvíz asdf", "desc": "asdf", "id": "asdf"},
-    {"title": "Kvíz tři", "desc": "nový popis", "id": "novy_id"},
-   
-]
- 
-# Funkce, která se spustí při kliknutí na tlačítko ve formě odkazu
-def on_link_click(link_name):
-    messagebox.showinfo("Odkaz kliknut", f"Klikli jste na odkaz: {link_name}")
- 
-# Funkce pro vytvoření kvízu (pro testovací účely)
-def create_quiz():
-    messagebox.showinfo("Vytvoření kvízu", "Kvíz byl vytvořen!")
- 
-# Vytvoření hlavního okna
+from frames.create_quiz import create_quiz
+from frames.show_quiz import show_quiz
+from frames.waiting import waiting_screen
+
 root = tk.Tk()
-root.title("Moje aplikace")
-root.geometry("1920x1080")  # Nastavení velikosti okna
- 
-# Nadpis "Text"
-title_label = tk.Label(root, text="Výběr kvízu", font=("Arial", 32, "bold"))
-title_label.grid(row=0, column=0, columnspan=5, pady=20)
- 
-# Tlačítko pro vytvoření kvízu
-quiz_button = tk.Button(root, text="Vytvořit kvíz", command=create_quiz, bg="black", fg="white", font=("Arial", 12, "bold"))
-quiz_button.grid(row=0, column=5, padx=10, pady=20)
- 
-# Vykreslení dynamických rámečků pro každý kvíz
-for index, quiz in enumerate(quizes):
-    row = 1 + (index // 2)
-    column = 1 if index % 2 == 0 else 3
- 
-    frame = tk.Frame(root, bd=2, relief="solid", padx=10, pady=10)
-    frame.grid(row=row, column=column, padx=10, pady=10, sticky="nsew")
- 
-    label_title = tk.Label(frame, text=quiz["title"], font=("Arial", 14, "bold"))
-    label_title.pack(anchor="center")
- 
-    label_desc = tk.Label(frame, text=quiz["desc"], wraplength=380, justify="center")
-    label_desc.pack(anchor="center", pady=5)
- 
-    link_button = tk.Button(frame, text=f"Klikněte na odkaz {index + 1}", fg="white", bg="black", bd=0, font=("Arial", 12),
-                            command=lambda q=quiz: on_link_click(q["id"]))
-    link_button.pack(side="bottom", anchor="center", pady=10)
- 
-# Nastavení flexibilní šířky sloupců
-root.grid_columnconfigure(0, weight=1)
-root.grid_columnconfigure(1, weight=3)
-root.grid_columnconfigure(2, weight=1)
-root.grid_columnconfigure(3, weight=3)
-root.grid_columnconfigure(4, weight=1)
-root.grid_columnconfigure(5, weight=1)
- 
-# Spuštění hlavní smyčky aplikace
+# root.geometry("1920x1080")
+
+quiz_list = [
+    { "id": 1, "title": "Kvíz 1" },
+]
+user_list = ["pepa", "karel"]
+
+# HANDLERS
+def create_quiz_handler():
+    show_quiz_actions["hide"]()
+    create_quiz_actions["show"]()
+
+def show_waiting_handler(quiz_id):
+    show_quiz_actions["hide"]()
+    waiting_actions["show"](user_list)
+
+def start_quiz_handler():
+    waiting_actions["hide"]()
+    print("Starting quiz")
+
+# FRAME ACTIONS
+show_quiz_actions = show_quiz(root, create_quiz_handler, show_waiting_handler)
+create_quiz_actions = create_quiz(root)
+waiting_actions = waiting_screen(root, start_quiz_handler)
+
+
+# Default page
+show_quiz_actions["show"](quiz_list)
+
 root.mainloop()
- 
