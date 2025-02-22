@@ -1,26 +1,36 @@
 import tkinter as tk
-from tkinter import messagebox
-from show_quiz import main_page
-from hide_page import empty_page
-from hide_page import hide_main_page
-from waiting import add_users
-
-
-# pro testování, potom to čapneš z db
-quizes = [
-    {"title": "Kvíz jedna", "desc": "popis", "id": "ksdljflūkajkfsd"},
-    {"title": "Kvíz asdf", "desc": "asdf", "id": "asdf"},
-    {"title": "Kvíz tři", "desc": "nový popis", "id": "novy_id"},
-    
-    {"title": "Kvíz tři", "desc": "nový popis", "id": "novy_id"},
-]
+from frames.create_quiz import create_quiz
+from frames.show_quiz import show_quiz
+from frames.waiting import waiting_screen
 
 root = tk.Tk()
-root.title("Moje aplikace")
-root.geometry("1920x1080")
+# root.geometry("1920x1080")
 
-#empty_page(root)
+quiz_list = [
+    { "id": 1, "title": "Kvíz 1" },
+]
+user_list = ["pepa", "karel"]
 
-main_page(root, quizes)
-#hide_main_page(root)
+# HANDLERS
+def create_quiz_handler():
+    show_quiz_actions["hide"]()
+    create_quiz_actions["show"]()
+
+def show_waiting_handler(quiz_id):
+    show_quiz_actions["hide"]()
+    waiting_actions["show"](user_list)
+
+def start_quiz_handler():
+    waiting_actions["hide"]()
+    print("Starting quiz")
+
+# FRAME ACTIONS
+show_quiz_actions = show_quiz(root, create_quiz_handler, show_waiting_handler)
+create_quiz_actions = create_quiz(root)
+waiting_actions = waiting_screen(root, start_quiz_handler)
+
+
+# Default page
+show_quiz_actions["show"](quiz_list)
+
 root.mainloop()

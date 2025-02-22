@@ -1,8 +1,18 @@
 import tkinter as tk
 from tkinter import messagebox
+from helpers import create_frame
 
 
 def create_quiz(root):
+    # Frame
+    frame_data = create_frame(root, "")
+    frame = frame_data["frame"]
+
+    activate_create_quiz(frame)
+
+    return frame_data
+
+def activate_create_quiz(root):
     for widget in root.winfo_children():
         widget.grid_forget()
 
