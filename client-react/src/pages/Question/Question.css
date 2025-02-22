@@ -1,0 +1,27 @@
+.card {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 25vh;
+ 
+   
+    
+}
+h1, .otazka{
+    text-align: center;
+}
+
+Button{
+    margin: 8px;
+    background-color: white;
+    color: black;
+    border-color: white;
+
+}
+
+button:hover {
+    background-color: rgb(189, 223, 243);
+    border-color: rgb(129, 188, 223);
+}

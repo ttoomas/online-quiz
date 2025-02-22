@@ -1,0 +1,16 @@
+.uvodnistranka {
+   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 80vh;
+}
+
+.enter{
+    margin-top: 1em;
+}
+
+h3{
+    text-align: center;
+}
