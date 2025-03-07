@@ -27,7 +27,7 @@ export default function MainPage() {
 
         <div>
           <h3>Zadejte token:</h3>
-          <InputText
+          <InputText 
             name="token"
             placeholder="token"
             onChange={(e) => handleChange(e)}
@@ -42,7 +42,7 @@ export default function MainPage() {
           />
         </div>
         <div className="enter">
-          <Button onSubmit={handlePost} onClick={redirectTo} label="Enter" />
+          <Button className="button_main" onSubmit={handlePost} onClick={redirectTo} label="Enter" />
         </div>
       </div>
     </>

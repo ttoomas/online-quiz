@@ -5,7 +5,7 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 
 
-export default function SeverityDemo() {
+export default function Question() {
 
     const navigate = useNavigate();
 
@@ -18,10 +18,12 @@ export default function SeverityDemo() {
       }, 1000);
 
     const data={
-        title: "otázka",
+        title: "otázka?",
         answers: [
             "jenda", 
-            "dva"
+            "dva",
+            "tri",
+            "ctyri"
         ],
         number_of_questions: 25,
         current_number: 10
@@ -33,14 +35,14 @@ export default function SeverityDemo() {
     };
 
     return (
-        <div>
+        <div className="otazky">
             <div className="otazka">Otázka: {data.current_number}/{data.number_of_questions}</div>
             <h1>{data.title}</h1>
             <div className="card flex justify-content-center">
                 
                 {data.answers.map((answer) => {
                     return (
-                        <Button label={answer} onClick={save}  />
+                        <Button className="question_button" label={answer} onClick={save}  />
                     )
 
                 })}
