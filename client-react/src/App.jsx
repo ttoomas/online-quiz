@@ -4,26 +4,29 @@ import Lobby from './pages/lobby/Lobby';
 import Question from './pages/Question/Question';
 import Layout from "./Layout";
 import Wait from "./pages/wait/Wait";
+import { SocketProvider } from "./socketContext";
 
 function App() {
 
   return (
     <>
-     <Router>
-            <Layout>
-                <Routes>
-                    <Route path="/" element={<MainPage />} />
-                </Routes>
-                <Routes>
-                    <Route path="/lobby" element={<Lobby />} />
-                </Routes>
-                <Routes>
-                    <Route path="/question" element={<Question />} />
-                </Routes>
-                <Routes>
-                    <Route path="/wait" element={<Wait />} />
-                </Routes>
-            </Layout>
+        <Router>
+            <SocketProvider>
+                <Layout>
+                    <Routes>
+                        <Route path="/" element={<MainPage />} />
+                    </Routes>
+                    <Routes>
+                        <Route path="/lobby" element={<Lobby />} />
+                    </Routes>
+                    <Routes>
+                        <Route path="/question" element={<Question />} />
+                    </Routes>
+                    <Routes>
+                        <Route path="/wait" element={<Wait />} />
+                    </Routes>
+                </Layout>
+            </SocketProvider>
         </Router>
     </>
   )
