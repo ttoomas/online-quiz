@@ -14,3 +14,17 @@
 h3{
     text-align: center;
 }
+
+.button_main{
+    margin: 8px;
+    background-color: rgb(245, 187, 227);
+    color: black;
+    border-color: rgb(180, 95, 155);
+
+}
+
+.button_main:hover {
+    background-color: rgb(190, 121, 167);
+    border-color: rgb(105, 49, 93);
+    
+}

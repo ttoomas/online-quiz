@@ -19,16 +19,16 @@ export default function Lobby() {
         return navigate(`/question`, { replace: true });
       };
     
-      setTimeout(() => {
+      /*setTimeout(() => {
         navigate(`/question`, { replace: true });
-      }, 2000);
+      }, 2000);*/
 
     return(
         <>
         <div className="lobby">
             <h1>Waiting for other players...</h1>
-            <DataTable className="tabulka"  value={products} tableStyle={{ minWidth: '50rem' }}>
-                <Column field="name" ></Column>
+            <DataTable  className="tabulka"  value={products} tableStyle={{ width: '40%', margin: '0 auto', minWidth: '500px' }}>
+                <Column field="name" header="members" ></Column>
             </DataTable>
         </div>
         </>

@@ -1,0 +1,38 @@
+.results {
+   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 30vh;
+}
+.p-datatable .p-column-header-content {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.again { 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 10em;
+}
+
+.results_button{
+    margin: 8px;
+    background-color: rgb(198, 238, 202);
+    color: black;
+    border-color: rgb(89, 148, 82);
+
+}
+
+.results_button:hover {
+    background-color: rgb(89, 148, 82);
+    border-color: rgb(60, 90, 63);
+    
+}
+
+.tabulka2 th {
+    background-color: rgba(198, 238, 202, 0.76);
+}

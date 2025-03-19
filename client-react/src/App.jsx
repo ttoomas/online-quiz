@@ -4,7 +4,9 @@ import Lobby from './pages/lobby/Lobby';
 import Question from './pages/Question/Question';
 import Layout from "./Layout";
 import Wait from "./pages/wait/Wait";
+import Results from "./pages/results/Results";
 import { SocketProvider } from "./socketContext";
+
 
 function App() {
 
@@ -24,6 +26,9 @@ function App() {
                     </Routes>
                     <Routes>
                         <Route path="/wait" element={<Wait />} />
+                    </Routes>
+                    <Routes>
+                        <Route path="/results" element={<Results />} />
                     </Routes>
                 </Layout>
             </SocketProvider>

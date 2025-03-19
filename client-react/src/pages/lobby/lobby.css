@@ -8,4 +8,8 @@
 }
 .p-datatable th, .p-datatable td {
     text-align: center; /* Centers both header and body cells */
+    
+}
+.tabulka th {
+    background-color: rgba(247, 228, 241, 0.514);
 }
