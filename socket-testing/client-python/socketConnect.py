@@ -21,7 +21,7 @@ def init():
         print('Quiz room created')
 
 
-    sio.connect('http://localhost:5000')
+    sio.connect('http://localhost:5100')
     
     wait_thread = threading.Thread(target=sio.wait)
     wait_thread.start()
