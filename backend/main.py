@@ -1,6 +1,6 @@
 import eventlet
-from helpers.socketio import sio, app
-from controllers.room import joinRoom
+from helpers.socketio import sio, app, rooms
+from controllers.room import joinRoom, getRoomPlayers
 
 # SOCKET.IO EVENTS
 # GENERAL
@@ -9,7 +9,7 @@ def connect(sid, environ):
     # TESTING
     # Create room (will be created from the py frontend)
     tempRoomId = "karel"
-    sio.enter_room(sid, tempRoomId)
+    rooms[tempRoomId] = []
     
     print('connect server')
 
@@ -25,10 +25,15 @@ def disconnect(sid):
 
 # PLAYER
 sio.on('joinRoom', joinRoom)
+sio.on('getRoomPlayers', getRoomPlayers)
 
 # ADMIN
 
 # TESTING
+
+@sio.on("createRoom")
+def createRoom(sid, data):
+    rooms[data["key"]] = []
 
 # # PLAYER
 # @sio.on("playerInit")
