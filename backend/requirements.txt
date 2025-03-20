@@ -1,2 +1,4 @@
 eventlet
 python-socketio
+uuid
+pyjwt
