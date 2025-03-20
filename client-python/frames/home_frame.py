@@ -2,7 +2,7 @@ import tkinter as tk
 from helpers import create_frame
 
 
-def show_quiz(root, create_quiz_handler, show_waiting_handler):
+def home_frame(root, create_quiz_handler, show_waiting_handler):
     # Frame
     frame_data = create_frame(root, "")
     frame = frame_data["frame"]
@@ -11,7 +11,7 @@ def show_quiz(root, create_quiz_handler, show_waiting_handler):
 
     def show(quiz_list):
         show_frame()
-        activate_show_quiz(frame, create_quiz_handler, show_waiting_handler, quiz_list)
+        activate_home_frame(frame, create_quiz_handler, show_waiting_handler, quiz_list)
 
 
     return {
@@ -20,7 +20,7 @@ def show_quiz(root, create_quiz_handler, show_waiting_handler):
         "hide": hide_frame
     }
 
-def activate_show_quiz(root, create_quiz_handler, show_waiting_handler, quiz_list):
+def activate_home_frame(root, create_quiz_handler, show_waiting_handler, quiz_list):
     # Clear existing widgets
     # IMPORTANT, DO NOT REMOVE (DŮLEŽITÉ, NEODSTRAŇUJTE)
     for widget in root.winfo_children():
