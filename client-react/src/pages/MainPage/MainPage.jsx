@@ -4,8 +4,13 @@ import { Button } from "primereact/button";
 import "./MainPage.css";
 import { useEffect, useState } from "react";
 import { useSocket } from "../../helpers/socketContext";
+import { useCookies } from "react-cookie";
 
 export default function MainPage() {
+    // TODO! - on every connect, send token to server and check room id, if it exists, join room
+    const [cookies, setCookie] = useCookies(["token"]);
+    const { socket } = useSocket();
+    
     const [formData, setFormData] = useState();
     const navigate = useNavigate();
     const handleChange = (e) => {
@@ -21,13 +26,21 @@ export default function MainPage() {
         // Join socket room and redirect
         const result = joinRoomSocket();
 
-        if(!result){
+        if(!result.success){
             // TODO: pokud je token spatny, hodi to error
             
             return;
         }
+        else if(!result.jwt){
+            throw new Error("JWT token is missing");
+        }
+
+        // Set cookie
+        setCookie("quiz-token", {
+            token: result.jwt
+        });
         
-        // redirectTo();
+        redirectTo();
     };
 
     const redirectTo = () => {
@@ -35,8 +48,6 @@ export default function MainPage() {
     };
 
     // Socket
-    const { socket } = useSocket();
-
     function initLoadSocket(){
 
     }
