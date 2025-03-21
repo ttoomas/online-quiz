@@ -17,14 +17,17 @@ export default function MainPage() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handlePost = (e) => {
+    const handlePost = async (e) => {
         e.preventDefault();
 
         // Validate data
         // TODO: pokud token je mene nez 4 znaky a prezdivka mene nez 2, hodi to error
 
         // Join socket room and redirect
-        const result = joinRoomSocket();
+        const result = await joinRoomSocket();
+
+        console.log(result);
+        
 
         if(!result.success){
             // TODO: pokud je token spatny, hodi to error
@@ -52,21 +55,17 @@ export default function MainPage() {
 
     }
 
-    function joinRoomSocket(){
-        socket.emit("joinRoom", {
-            roomId: formData.roomId,
-            username: formData.username
-        }, handleResponse)
-
-        function handleResponse(rsp){
-            if(!rsp.success){
-                // TODO: zobrazit spatny token
-
-                return;
+    async function joinRoomSocket(){
+        return new Promise((resolve, reject) => {
+            socket.emit("joinRoom", {
+                roomId: formData.roomId,
+                username: formData.username
+            }, handleResponse)
+    
+            function handleResponse(rsp){
+                resolve(rsp);
             }
-
-            redirectTo();
-        }
+        })
     }
 
     useEffect(initLoadSocket, []);

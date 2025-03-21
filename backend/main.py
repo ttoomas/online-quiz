@@ -1,6 +1,13 @@
 import eventlet
 from helpers.socketio import sio, app, rooms
 from controllers.room import joinRoom, getRoomPlayers
+from controllers.load import check_jwt_token
+
+tempRoomId = "karel"
+rooms[tempRoomId] = {
+    "status": "waiting",
+    "players": []
+}
 
 # SOCKET.IO EVENTS
 # GENERAL
@@ -8,10 +15,10 @@ from controllers.room import joinRoom, getRoomPlayers
 def connect(sid, environ):
     # TESTING
     # Create room (will be created from the py frontend)
-    tempRoomId = "karel"
-    rooms[tempRoomId] = []
+    
     
     print('connect server')
+    print(rooms)
 
 @sio.event
 def my_message(sid, data):
@@ -20,10 +27,13 @@ def my_message(sid, data):
 @sio.event
 def disconnect(sid):
     print('disconnect ')
+    print(rooms)
     
     # sio.leave_room(sid, 'chat_users')
 
 # PLAYER
+sio.on('checkJwtToken', check_jwt_token)
+
 sio.on('joinRoom', joinRoom)
 sio.on('getRoomPlayers', getRoomPlayers)
 
@@ -33,7 +43,10 @@ sio.on('getRoomPlayers', getRoomPlayers)
 
 @sio.on("createRoom")
 def createRoom(sid, data):
-    rooms[data["key"]] = []
+    rooms[data["key"]] = {
+        "status": "waiting",
+        "players": []
+    }
 
 # # PLAYER
 # @sio.on("playerInit")

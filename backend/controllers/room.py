@@ -18,20 +18,20 @@ def joinRoom(sid, data):
         sio.enter_room(sid, room_id)
 
     # Generate jwt
-    uuid = uuid.uuid4().hex
+    user_uuid = uuid.uuid4().hex
     jwt_token = jwt.encode({
-        "uuid": uuid,
+        "uuid": user_uuid,
         "room_id": room_id,
         "username": user_name
     }, JWT_SECRET, algorithm="HS256")
 
     # Update user name    
-    rooms[room_id].append({
+    rooms[room_id]["players"].append({
         "sid": sid,
         "username": user_name,
-        "uuid": uuid
+        "uuid": user_uuid,
     })
-    
+
     # Send waiting room to user
     playerNames = filterPlayerNames(room_id)
     data = {
@@ -48,8 +48,16 @@ def joinRoom(sid, data):
 def getRoomPlayers(sid):
     # Get room id
     user_rooms = sio.rooms(sid)
-    room_id = user_rooms[1]
+    room_id = None
 
+    for room_key in user_rooms:
+        if room_key in rooms:
+            room_id = room_key
+            break
+        
+    if not room_id:
+        return []
+    
     # Get room player names and return
     playerNames = filterPlayerNames(room_id)
 
@@ -59,7 +67,7 @@ def getRoomPlayers(sid):
     
 
 def filterPlayerNames(id):
-    room = rooms[id]
+    room = rooms[id]["players"]
     playerNames = []
 
     for player in room:

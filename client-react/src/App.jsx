@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { SocketProvider } from "./helpers/socketMiddleware";
+import GlobalWrapper from "./helpers/GlobalWrapper";
 
 import MainPage from './pages/MainPage/MainPage';
 import Lobby from './pages/lobby/Lobby';
@@ -15,14 +16,16 @@ function App() {
         <Router>
             <CookiesProvider  defaultSetOptions={{ path: '/' }}>
                 <SocketProvider>
-                    <Routes>
-                        <Route path="/" element={<MainPage />} />
-                        <Route path="/lobby" element={<Lobby />} />
-                        <Route path="/question" element={<Question />} />
-                        <Route path="/wait" element={<Wait />} />
-                        <Route path="/results" element={<Results />} />
-                        <Route path="/test" element={<Test />} />
-                    </Routes>
+                    <GlobalWrapper>
+                        <Routes>
+                            <Route path="/" element={<MainPage />} />
+                            <Route path="/lobby" element={<Lobby />} />
+                            <Route path="/question" element={<Question />} />
+                            <Route path="/wait" element={<Wait />} />
+                            <Route path="/results" element={<Results />} />
+                            <Route path="/test" element={<Test />} />
+                        </Routes>
+                    </GlobalWrapper>
                 </SocketProvider>
             </CookiesProvider>
         </Router>
