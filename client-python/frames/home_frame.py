@@ -2,6 +2,7 @@ import tkinter as tk
 from helpers import create_frame
 
 
+
 def home_frame(root, create_quiz_handler, show_waiting_handler):
     # Frame
     frame_data = create_frame(root, "")
