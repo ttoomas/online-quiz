@@ -1,1 +1,3 @@
 python-tk
+eventlet
+python-socketio

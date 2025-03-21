@@ -74,3 +74,6 @@ def filterPlayerNames(id):
         playerNames.append(player["username"])
 
     return playerNames
+
+def create_room(sid, data):
+    room_uuid = data.

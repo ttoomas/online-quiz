@@ -1,4 +1,5 @@
 import tkinter as tk
+from controllers.default_connect import default_connect, close_connection, create_room_request
 
 from frames.home_frame import home_frame
 from frames.create_quiz import create_quiz
@@ -8,14 +9,25 @@ from frames.round_results import round_results
 from frames.round_results import activate_round_results
 
 
+default_connect()
 
 root = tk.Tk()
-root.geometry("1920x1080")
+# root.geometry("1920x1080")
+
+user_list = ["pepa", "karel"]
+
 
 quiz_list = [
-    { "id": 1, "title": "Kvíz 1" },
+    {
+        "name": "Kvíz 1",
+        "uuid": "1234-5678-1234-5678",
+    },
+    {
+        
+        "name": "Kvíz 2",
+        "uuid": "1234-5678-56456-5678",
+    }
 ]
-user_list = ["pepa", "karel"]
 
 # HANDLERS
 def create_quiz_handler():
@@ -23,8 +35,9 @@ def create_quiz_handler():
     create_quiz_actions["show"]()
 
 def show_waiting_handler(quiz_id):
-    home_frame_actions["hide"]()
-    waiting_actions["show"](user_list)
+    create_room_request(quiz_id)
+    # home_frame_actions["hide"]()
+    # waiting_actions["show"](user_list)
 
 def start_quiz_handler():
     waiting_actions["hide"]()
@@ -45,16 +58,18 @@ waiting_actions = waiting_screen(root, start_quiz_handler)
 guessing_actions = guessing_room(root)
 results_actions = round_results(root)
 
-# Add a button or other way to trigger results after the guessing room is complete
-# For the sake of this example, we can simulate the transition after some time
-root.after(60000, show_results_handler)  # After 3 seconds, show the results
 
 #Default page
 home_frame_actions["show"](quiz_list)
 
-# Simulate showing the guessing room and updating players
-#guessing_actions["show"]()
-#guessing_actions["update"](["player1", "player2", "player3"])
+ 
+# Uzavření spojení
+def closeWindow():
+    close_connection()
+    root.destroy()
 
+root.protocol("WM_DELETE_WINDOW", closeWindow)
+
+# Spuštění hlavní smyčky aplikace
 root.mainloop()
 

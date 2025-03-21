@@ -46,11 +46,11 @@ def activate_home_frame(root, create_quiz_handler, show_waiting_handler, quiz_li
         frame = tk.Frame(root, bd=2, relief="solid", padx=10, pady=10)
         frame.grid(row=row, column=column, padx=10, pady=10, sticky="nsew")
 
-        label_title = tk.Label(frame, text=quiz["title"], font=("Arial", 14, "bold"))
+        label_title = tk.Label(frame, text=quiz["name"], font=("Arial", 14, "bold"))
         label_title.pack(anchor="center")
 
-        link_button = tk.Button(frame, text=f"Klikněte na odkaz {index + 1}", fg="white", bg="black", bd=0, font=("Arial", 12),
-                                command=lambda q=quiz: show_waiting_handler(q["id"]))  # Opraveno volání funkce
+        link_button = tk.Button(frame, text=f"Spustit kvíz", fg="white", bg="black", bd=0, font=("Arial", 12),
+                                command=lambda q=quiz: show_waiting_handler(q["uuid"]))  # Opraveno volání funkce
         link_button.pack(side="bottom", anchor="center", pady=10)
 
         # Nastavení rozvržení pro lepší přizpůsobení velikosti obrazovky

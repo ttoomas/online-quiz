@@ -28,7 +28,7 @@ def init():
 
     return sio
 
-def getSio():
+def get_sio():
     global SIO
 
     if SIO is None:
@@ -36,14 +36,14 @@ def getSio():
 
     return SIO
 
-def defaultConnect():
-    getSio()
+def default_connect():
+    get_sio()
 
-def closeConnection():
-    sio = getSio()
+def close_connection():
+    sio = get_sio()
     sio.disconnect()
 
 # Join room
-def create_quiz_request(quizId):
-    sio = getSio()
-    sio.emit('createQuiz', {"quizId": quizId})
+def create_room_request(quizId):
+    sio = get_sio()
+    sio.emit('createRoom', {"quizId": quizId})
