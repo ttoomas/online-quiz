@@ -20,12 +20,12 @@ user_list = ["pepa", "karel"]
 quiz_list = [
     {
         "name": "Kvíz 1",
-        "uuid": "1234-5678-1234-5678",
+        "uuid": "1020",
     },
     {
         
         "name": "Kvíz 2",
-        "uuid": "1234-5678-56456-5678",
+        "uuid": "3040",
     }
 ]
 
@@ -37,7 +37,7 @@ def create_quiz_handler():
 def show_waiting_handler(quiz_id):
     create_room_request(quiz_id)
     home_frame_actions["hide"]()
-    waiting_actions["show"]()
+    waiting_actions["show"](quiz_id)
 
 def start_quiz_handler():
     waiting_actions["hide"]()
