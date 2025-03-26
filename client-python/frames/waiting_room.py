@@ -1,29 +1,28 @@
 import tkinter as tk
 from helpers import create_frame
 
+
+frame = None
+
 def waiting_screen(root, start_quiz_handler):
+    global frame
+    
     # Frame
     frame_data = create_frame(root, "")
     frame = frame_data["frame"]
-    show_frame = frame_data["show"]
-    hide_frame = frame_data["hide"]
 
-    def show(user_list):
-        show_frame()
-        activate_waiting_screen(frame, start_quiz_handler, user_list)
+    enable_waiting_screen(start_quiz_handler, [])
 
     return {
         "frame": frame,
-        "show": show,
-        "hide": hide_frame
+        "show": frame_data["show"],
+        "hide": frame_data["hide"]
     }
 
-def activate_waiting_screen(root, start_quiz_handler, user_list):
-    # Clear existing widgets
-    # IMPORTANT, DO NOT REMOVE (DŮLEŽITÉ, NEODSTRAŇUJTE)
-    for widget in root.winfo_children():
-        widget.grid_forget()
-    
+def enable_waiting_screen(start_quiz_handler, user_list):
+    global frame
+    root = frame
+
     # Funkce pro zobrazení čekací obrazovky
     for widget in root.winfo_children():
         widget.grid_forget()
@@ -39,3 +38,15 @@ def activate_waiting_screen(root, start_quiz_handler, user_list):
 
     # Tlačítko pro start kvízu
     tk.Button(root, text="Start", command=start_quiz_handler, font=("Arial", 14), bg="green", fg="white").grid(row=2, column=0, pady=20)
+
+def update_waiting_players(user_list):
+    global frame
+    root = frame
+
+    # Update user list
+    users_listbox = root.winfo_children()[1]
+    users_listbox.delete(0, tk.END)
+    for user in user_list:
+        users_listbox.insert(tk.END, user)
+    
+    root.update()

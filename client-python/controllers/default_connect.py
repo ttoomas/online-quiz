@@ -1,6 +1,7 @@
 import socketio
 import threading
-from main import update_waiting_room
+# from main import update_waiting_room
+from frames.waiting_room import update_waiting_players
 
 SIO = None
 
@@ -21,6 +22,7 @@ def init():
     @sio.on('updateRoomPlayers')
     def update_room_players(data):
         print(data)
+        update_waiting_players(data["playerNames"])
         # update_waiting_room(data["playerNames"])
 
 
