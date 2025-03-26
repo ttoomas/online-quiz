@@ -1,3 +1,5 @@
-python-tk
+tk
 eventlet
 python-socketio
+requests
+websocket-client

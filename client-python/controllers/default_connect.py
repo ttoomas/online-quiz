@@ -1,5 +1,6 @@
 import socketio
 import threading
+from main import update_waiting_room
 
 SIO = None
 
@@ -8,17 +9,19 @@ def init():
 
     @sio.event
     def connect():
-        sio.emit('adminInit')
+        sio.emit('initClient', {
+            "role": "admin"
+        })
         print('connection established')
-
 
     @sio.event
     def disconnect():
         print('disconnected from server')
     
-    @sio.on('quizCreated')
-    def on_quiz_created():
-        print('Quiz room created')
+    @sio.on('updateRoomPlayers')
+    def update_room_players(data):
+        print(data)
+        # update_waiting_room(data["playerNames"])
 
 
     sio.connect('http://localhost:5100')

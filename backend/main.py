@@ -1,7 +1,7 @@
 import eventlet
 from helpers.socketio import sio, app, rooms
 from controllers.room import joinRoom, getRoomPlayers, create_room
-from controllers.load import check_jwt_token
+from controllers.load import check_jwt_token, init_client
 
 tempRoomId = "karel"
 rooms[tempRoomId] = {
@@ -20,6 +20,9 @@ def connect(sid, environ):
 def disconnect(sid):
     print('disconnect ')
     sio.leave_room(sid, 'chat_users')
+
+# Init client (player/admin)
+sio.on('initClient', init_client)
 
 # PLAYER
 sio.on('checkJwtToken', check_jwt_token)

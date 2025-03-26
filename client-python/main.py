@@ -9,7 +9,9 @@ from frames.round_results import round_results
 from frames.round_results import activate_round_results
 
 
-default_connect()
+
+def connect_socket():
+    default_connect()
 
 root = tk.Tk()
 # root.geometry("1920x1080")
@@ -36,8 +38,8 @@ def create_quiz_handler():
 
 def show_waiting_handler(quiz_id):
     create_room_request(quiz_id)
-    # home_frame_actions["hide"]()
-    # waiting_actions["show"](user_list)
+    home_frame_actions["hide"]()
+    waiting_actions["show"]([])
 
 def start_quiz_handler():
     waiting_actions["hide"]()
@@ -59,6 +61,11 @@ guessing_actions = guessing_room(root)
 results_actions = round_results(root)
 
 
+# UPDATE FUNCTIONS
+def update_waiting_room(players):
+    waiting_actions["show"](players)
+
+
 #Default page
 home_frame_actions["show"](quiz_list)
 
@@ -73,3 +80,6 @@ root.protocol("WM_DELETE_WINDOW", closeWindow)
 # Spuštění hlavní smyčky aplikace
 root.mainloop()
 
+if __name__ == "__main__":
+    connect_socket()
+    print("Connected to socket")

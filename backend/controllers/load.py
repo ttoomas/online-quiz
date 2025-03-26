@@ -1,7 +1,9 @@
 import jwt
 from env import JWT_SECRET
 from helpers.socketio import sio, rooms
+from helpers.role_check import only_player
 
+# @only_player
 def check_jwt_token(sid, data):
     jwt_token = data["jwtToken"]
 
@@ -19,10 +21,10 @@ def check_jwt_token(sid, data):
     player_uuid = token_data["uuid"]
     room_id = token_data["room_id"]
 
-    room = rooms[room_id]
-
-    if room is None:
+    if room_id not in rooms:
         return { 'success': False }
+
+    room = rooms[room_id]
 
     # Get player
     player = find_player_uuid(room, player_uuid)
@@ -47,3 +49,22 @@ def find_player_uuid(room, player_uuid):
             return player
 
     return None
+
+
+def init_client(sid, data):
+    role = data["role"]
+
+    if role == "player":
+        print("Init player")
+        sio.save_session(sid, {
+            "role": "player"
+        })
+    elif role == "admin":
+        print("Init admin")
+        sio.save_session(sid, {
+            "role": "admin"
+        })
+    else:
+        return { 'success': False }
+    
+    return { 'success': True }

@@ -63,6 +63,7 @@ export default function MainPage() {
             }, handleResponse)
     
             function handleResponse(rsp){
+                console.log(rsp);
                 resolve(rsp);
             }
         })

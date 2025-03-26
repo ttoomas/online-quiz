@@ -9,6 +9,10 @@ export const SocketProvider = ({ children }) => {
 
     if (!socketRef.current) {
         socketRef.current = io("http://localhost:5100");
+
+        socketRef.current.emit("initClient", {
+            "role": "player"
+        })
     }
 
     useEffect(() => {
