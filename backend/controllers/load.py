@@ -2,6 +2,7 @@ import jwt
 from env import JWT_SECRET
 from helpers.socketio import sio, rooms
 from helpers.role_check import only_player
+from db.quiz_list import get_quiz_list
 
 # @only_player
 def check_jwt_token(sid, data):
@@ -59,12 +60,21 @@ def init_client(sid, data):
         sio.save_session(sid, {
             "role": "player"
         })
+
+        return {
+            'success': True
+        }
     elif role == "admin":
         print("Init admin")
         sio.save_session(sid, {
             "role": "admin"
         })
-    else:
-        return { 'success': False }
-    
-    return { 'success': True }
+
+        quiz_list = get_quiz_list()
+
+        return {
+            'success': True,
+            'quiz_list': quiz_list
+        }
+
+    return { 'success': False }

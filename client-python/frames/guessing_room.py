@@ -23,10 +23,6 @@ def guessing_room(root):
     }
 
 def update_guessing_players(frame, players):
-    """
-    Updates the UI to display the list of players who have guessed.
-    This could be shown in a label or listbox.
-    """
     # Clearing any previous widgets
     for widget in frame.winfo_children():
         widget.destroy()
@@ -42,10 +38,6 @@ def update_guessing_players(frame, players):
     listbox.pack()
 
 def activate_guessing_room(frame):
-    """
-    Sets up the UI for the guessing room, including the header, player list, 
-    and a countdown timer.
-    """
     # Header Label (room title)
     header_label = tk.Label(frame, text="Guessing Room", font=("Helvetica", 16))
     header_label.pack(pady=10)

@@ -2,12 +2,15 @@ import eventlet
 from helpers.socketio import sio, app, rooms
 from controllers.room import joinRoom, getRoomPlayers, create_room
 from controllers.load import check_jwt_token, init_client
+from controllers.questions import start_questions_loop
 
 tempRoomId = "karel"
 rooms[tempRoomId] = {
     "status": "waiting",
+    "current_question": 0,
     "players": []
 }
+
 
 # SOCKET.IO EVENTS
 # GENERAL
@@ -32,6 +35,7 @@ sio.on('getRoomPlayers', getRoomPlayers)
 
 # ADMIN
 sio.on("createRoom", create_room)
+sio.on("startQuiz", start_questions_loop)
 
 # TESTING
 

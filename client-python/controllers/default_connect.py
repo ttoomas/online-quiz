@@ -2,6 +2,8 @@ import socketio
 import threading
 # from main import update_waiting_room
 from frames.waiting_room import update_waiting_players
+from frames.home_frame import update_quiz_list
+
 
 SIO = None
 
@@ -12,9 +14,9 @@ def init():
     def connect():
         sio.emit('initClient', {
             "role": "admin"
-        })
+        }, callback=on_connect)
         print('connection established')
-
+    
     @sio.event
     def disconnect():
         print('disconnected from server')
@@ -23,7 +25,6 @@ def init():
     def update_room_players(data):
         print(data)
         update_waiting_players(data["playerNames"])
-        # update_waiting_room(data["playerNames"])
 
 
     sio.connect('http://localhost:5100')
@@ -52,3 +53,9 @@ def close_connection():
 def create_room_request(quizId):
     sio = get_sio()
     sio.emit('createRoom', {"quizId": quizId})
+
+# On connect
+def on_connect(data):
+    quiz_list = data["quiz_list"]
+
+    update_quiz_list(quiz_list)

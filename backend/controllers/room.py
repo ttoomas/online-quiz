@@ -86,6 +86,7 @@ def create_room(sid, data):
     room_uuid = data["quizId"]
     rooms[room_uuid] = {
         "status": "waiting",
+        "current_question": -1,
         "admin": sid,
         "players": []
     }

@@ -1,5 +1,6 @@
 import tkinter as tk
 from controllers.default_connect import default_connect, close_connection, create_room_request
+from controllers.questions import start_questions
 
 from frames.home_frame import home_frame
 from frames.create_quiz import create_quiz
@@ -9,25 +10,10 @@ from frames.round_results import round_results
 from frames.round_results import activate_round_results
 
 
-default_connect()
 
 root = tk.Tk()
 # root.geometry("1920x1080")
 
-user_list = ["pepa", "karel"]
-
-
-quiz_list = [
-    {
-        "name": "Kvíz 1",
-        "uuid": "1020",
-    },
-    {
-        
-        "name": "Kvíz 2",
-        "uuid": "3040",
-    }
-]
 
 # HANDLERS
 def create_quiz_handler():
@@ -39,17 +25,17 @@ def show_waiting_handler(quiz_id):
     home_frame_actions["hide"]()
     waiting_actions["show"](quiz_id)
 
-def start_quiz_handler():
+def start_quiz_handler(room_id):
+    start_questions(room_id)
     waiting_actions["hide"]()
     guessing_actions["show"]()
 
-def show_results_handler():
-    # After the guessing round, show the results
-    guessing_actions["hide"]()  # Hide the guessing room
-    results_actions["show"]([
-        { "user": "pepa", "points": 10 },
-        { "user": "karel", "points": 5 }
-    ])  # Pass the results to show them
+# def show_results_handler():
+#     guessing_actions["hide"]()
+#     results_actions["show"]([
+#         { "user": "pepa", "points": 10 },
+#         { "user": "karel", "points": 5 }
+#     ])
 
 # FRAME ACTIONS
 home_frame_actions = home_frame(root, create_quiz_handler, show_waiting_handler)
@@ -65,8 +51,12 @@ def closeWindow():
 
 
 # Default page
-home_frame_actions["show"](quiz_list)
+home_frame_actions["show"]()
 root.protocol("WM_DELETE_WINDOW", closeWindow)
+
+# Spuštění připojení
+default_connect()
+
 
 # Spuštění hlavní smyčky aplikace
 root.mainloop()

@@ -2,9 +2,12 @@ import { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "./socketContext";
+import { useDispatch } from "react-redux";
+import { setQuestion } from "./redux/slice";
 
 export const SocketProvider = ({ children }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const socketRef = useRef();
 
     if (!socketRef.current) {
@@ -22,6 +25,19 @@ export const SocketProvider = ({ children }) => {
         
         socket.on("navigate", (data) => {
             console.log(data);
+        });
+
+        socket.on("showQuestion", (data) => {
+            const newData = {
+                title: data.title,
+                answers: data.answers_list,
+                number_of_questions: data.number_of_questions,
+                current_question: data.current_question,
+                time: data.time                
+            }
+            dispatch(setQuestion(newData));
+
+            navigate("/question", { replace: true });
         });
 
         return () => socket.off("navigate");
