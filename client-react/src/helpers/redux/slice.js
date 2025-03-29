@@ -6,8 +6,8 @@ const userSlice = createSlice({
         question: {
             title: "",
             answers: [],
-            number_of_questions: 0,
-            current_number: 0,
+            totalQuestiosNumber: 0,
+            currentQuestionNumber: 0,
             time: 0,
         },
     },

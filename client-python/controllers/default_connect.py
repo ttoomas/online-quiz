@@ -1,8 +1,8 @@
 import socketio
 import threading
-# from main import update_waiting_room
 from frames.waiting_room import update_waiting_players
 from frames.home_frame import update_quiz_list
+from frames.guessing_room import update_guessing_players, update_guessing_title, start_guessing_time
 
 
 SIO = None
@@ -25,6 +25,14 @@ def init():
     def update_room_players(data):
         print(data)
         update_waiting_players(data["playerNames"])
+
+    @sio.on('showQuestion')
+    def show_question(data):
+        title = data["title"]
+        time = data["time"]
+        
+        update_guessing_title(title)
+        start_guessing_time(time)
 
 
     sio.connect('http://localhost:5100')

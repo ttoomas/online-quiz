@@ -54,4 +54,6 @@ quiz_questions = [
 
 
 def get_quiz_questions():
+    # TODO - Get questions from DB
+    # TODO - Also save it into dict, so we can use it in the show_answer function
     return quiz_questions

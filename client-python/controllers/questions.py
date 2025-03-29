@@ -33,9 +33,7 @@ from controllers.default_connect import get_sio
 #     pass
 
 
-def start_questions(room_id):
+def start_questions():
     sio = get_sio()
 
-    sio.emit('startQuiz', {
-        "room_id": room_id
-    })
+    sio.emit('startQuiz')

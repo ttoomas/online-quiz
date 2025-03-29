@@ -1,33 +1,73 @@
 import "./Question.css";
 import { Button } from 'primereact/button';
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useSocket } from "../../helpers/socketContext";
 
 
 export default function Question() {
     const navigate = useNavigate();
     const question = useSelector((state) => state.user.question);
+    const [timeLeft, setTimeLeft] = useState(0);
+    const { socket } = useSocket();
 
     const redirectTo = () => {
         return navigate(`/wait`, { replace: true });
     };
     
-    const save = () => {
+    const handlePost = async (answerId) => {
+        await sendAnswer(answerId);
         navigate(`/wait`, { replace: true });
     };
+
+    // Socket
+    async function sendAnswer(answerId){
+        return new Promise((resolve, reject) => {
+            socket.emit("sendAnswer", {
+                answer_id: answerId
+            }, handleResponse);
+
+            function handleResponse(rsp){
+                console.log(rsp);
+                resolve(rsp);
+            }
+        })
+    }
+    
+    // Question Countdown
+    useEffect(() => {
+        console.log(question);
+        
+        setTimeLeft(question.time);
+        let cheatTime = question.time;
+
+        const interval = setInterval(() => {
+            if (cheatTime > 0) {
+                cheatTime--;
+                setTimeLeft(cheatTime);
+                return;
+            }
+
+            clearInterval(interval);
+        }, 1000);        
+
+        return () => {
+            clearInterval(interval);
+        }
+    }, [question.time])
 
     return (
         <>
         {question ? (
             <div className="otazky">
-                <div className="otazka">Otázka: {question.current_question}/{question.number_of_questions}</div>
-                <p>Time: {question.time}</p>
+                <div className="otazka">Otázka: {question.currentQuestionNumber}/{question.totalQuestiosNumber}</div>
+                <p>Time: {timeLeft}</p>
                 <h1>{question.title}</h1>
                 <div className="card flex justify-content-center">
                     {question.answers.map((answer) => {
                         return (
-                            <Button className="question_button" label={answer.answer} onClick={save}  />
+                            <Button id={answer.id_question} className="question_button" label={answer.answer} onClick={() => handlePost(answer.id_question)}  />
                         )
                     })}
                 </div>

@@ -7,7 +7,6 @@ import { useSocket } from "../../helpers/socketContext";
 import { useCookies } from "react-cookie";
 
 export default function MainPage() {
-    // TODO! - on every connect, send token to server and check room id, if it exists, join room
     const [cookies, setCookie] = useCookies(["token"]);
     const { socket } = useSocket();
     

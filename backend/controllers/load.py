@@ -1,6 +1,7 @@
 import jwt
 from env import JWT_SECRET
-from helpers.socketio import sio, rooms
+from helpers.socketio import sio
+from helpers.rooms import rooms
 from helpers.role_check import only_player
 from db.quiz_list import get_quiz_list
 

@@ -2,7 +2,8 @@ import uuid
 import jwt
 from env import JWT_SECRET
 from helpers.role_check import only_admin, only_player
-from helpers.socketio import sio, rooms
+from helpers.socketio import sio
+from helpers.rooms import rooms, get_room_id_by_sid
 
 # @only_player
 def joinRoom(sid, data):
@@ -34,6 +35,8 @@ def joinRoom(sid, data):
         "sid": sid,
         "username": user_name,
         "uuid": user_uuid,
+        "score": 0,
+        "questions": []
     })
 
     print("sending waiting room")
@@ -52,16 +55,9 @@ def joinRoom(sid, data):
     }
 
 def getRoomPlayers(sid):
-    # Get room id
-    user_rooms = sio.rooms(sid)
-    room_id = None
+    room_id = get_room_id_by_sid(sid)
 
-    for room_key in user_rooms:
-        if room_key in rooms:
-            room_id = room_key
-            break
-        
-    if not room_id:
+    if room_id is None:
         return []
     
     # Get room player names and return

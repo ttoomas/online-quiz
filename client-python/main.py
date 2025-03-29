@@ -25,8 +25,8 @@ def show_waiting_handler(quiz_id):
     home_frame_actions["hide"]()
     waiting_actions["show"](quiz_id)
 
-def start_quiz_handler(room_id):
-    start_questions(room_id)
+def start_quiz_handler():
+    start_questions()
     waiting_actions["hide"]()
     guessing_actions["show"]()
 
@@ -44,7 +44,7 @@ waiting_actions = waiting_screen(root, start_quiz_handler)
 guessing_actions = guessing_room(root)
 results_actions = round_results(root)
 
-# Uzavření spojení
+# Close window and connection
 def closeWindow():
     close_connection()
     root.destroy()
@@ -54,9 +54,7 @@ def closeWindow():
 home_frame_actions["show"]()
 root.protocol("WM_DELETE_WINDOW", closeWindow)
 
-# Spuštění připojení
 default_connect()
 
 
-# Spuštění hlavní smyčky aplikace
 root.mainloop()

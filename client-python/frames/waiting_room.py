@@ -11,10 +11,10 @@ def waiting_screen(root, start_quiz_handler):
     frame_data = create_frame(root, "")
     frame = frame_data["frame"]
 
-    enable_waiting_screen([])
+    enable_waiting_screen(start_quiz_handler, [])
 
     def show_frame(quiz_id):
-        update_waiting_quiz_id(start_quiz_handler, quiz_id)
+        update_waiting_quiz_id(quiz_id)
         frame_data["show"]()
 
     return {
@@ -23,7 +23,7 @@ def waiting_screen(root, start_quiz_handler):
         "hide": frame_data["hide"]
     }
 
-def enable_waiting_screen(user_list):
+def enable_waiting_screen(start_quiz_handler, user_list):
     global frame
     root = frame
 
@@ -45,19 +45,15 @@ def enable_waiting_screen(user_list):
     users_listbox.grid(row=2, column=0, pady=10)
 
     # Tlačítko pro start kvízu
-    tk.Button(root, text="Start", font=("Arial", 14), bg="green", fg="white").grid(row=3, column=0, pady=20)
+    tk.Button(root, text="Start", command=start_quiz_handler, font=("Arial", 14), bg="green", fg="white").grid(row=3, column=0, pady=20)
 
-def update_waiting_quiz_id(start_quiz_handler, quiz_id):
+def update_waiting_quiz_id(quiz_id):
     global frame
     root = frame
 
     # Update quiz id
     quiz_id_label = root.winfo_children()[1]
     quiz_id_label["text"] = f"ID kvízu: {quiz_id}"
-
-    # UPdate start button
-    start_button = root.winfo_children()[3]
-    start_button["command"] = lambda: start_quiz_handler(quiz_id)
 
     root.update()
 

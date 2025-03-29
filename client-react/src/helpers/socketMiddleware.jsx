@@ -31,8 +31,8 @@ export const SocketProvider = ({ children }) => {
             const newData = {
                 title: data.title,
                 answers: data.answers_list,
-                number_of_questions: data.number_of_questions,
-                current_question: data.current_question,
+                totalQuestiosNumber: data.number_of_questions,
+                currentQuestionNumber: data.current_question,
                 time: data.time                
             }
             dispatch(setQuestion(newData));
