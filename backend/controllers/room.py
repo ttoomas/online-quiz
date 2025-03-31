@@ -3,7 +3,7 @@ import jwt
 from env import JWT_SECRET
 from helpers.role_check import only_admin, only_player
 from helpers.socketio import sio
-from helpers.rooms import rooms, get_room_id_by_sid
+from helpers.rooms import rooms, get_room_id_by_sid, create_room_var, add_player_to_room
 
 # @only_player
 def joinRoom(sid, data):
@@ -31,13 +31,7 @@ def joinRoom(sid, data):
 
     print("updating room")
     # Update user name    
-    rooms[room_id]["players"].append({
-        "sid": sid,
-        "username": user_name,
-        "uuid": user_uuid,
-        "score": 0,
-        "questions": []
-    })
+    add_player_to_room(room_id, sid, user_name, user_uuid)
 
     print("sending waiting room")
     # Send waiting room to user and admin to update players
@@ -80,12 +74,7 @@ def filterPlayerNames(id):
 # @only_admin
 def create_room(sid, data):
     room_uuid = data["quizId"]
-    rooms[room_uuid] = {
-        "status": "waiting",
-        "current_question": -1,
-        "admin": sid,
-        "players": []
-    }
+    create_room_var(room_uuid, sid)
 
     # Put admin inside of the room
     sio.enter_room(sid, room_uuid)

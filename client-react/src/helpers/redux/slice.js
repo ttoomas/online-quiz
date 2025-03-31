@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const userSlice = createSlice({
-    name: "user",
+const quizSlice = createSlice({
+    name: "quiz",
     initialState: {
         question: {
             title: "",
@@ -10,13 +10,17 @@ const userSlice = createSlice({
             currentQuestionNumber: 0,
             time: 0,
         },
+        guessedPlayers: [],
     },
     reducers: {
         setQuestion: (state, action) => {
             state.question = action.payload; // Update the question state with the payload
         },
+        setGuessedPlayers: (state, action) => {
+            state.guessedPlayers = action.payload; // Update the guessed players state with the payload
+        },
     },
 });
 
-export const { setQuestion } = userSlice.actions;
-export default userSlice.reducer;
+export const { setQuestion, setGuessedPlayers } = quizSlice.actions;
+export default quizSlice.reducer;

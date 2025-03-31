@@ -34,6 +34,10 @@ def init():
         update_guessing_title(title)
         start_guessing_time(time)
 
+    @sio.on('updateGuessedPlayers')
+    def update_guessed_players(data):
+        guessed_players = data["guessed_players"]
+        update_guessing_players(guessed_players)
 
     sio.connect('http://localhost:5100')
     

@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "./socketContext";
 import { useDispatch } from "react-redux";
-import { setQuestion } from "./redux/slice";
+import { setGuessedPlayers, setQuestion } from "./redux/slice";
 
 export const SocketProvider = ({ children }) => {
     const navigate = useNavigate();
@@ -40,7 +40,22 @@ export const SocketProvider = ({ children }) => {
             navigate("/question", { replace: true });
         });
 
-        return () => socket.off("navigate");
+        socket.on("updateGuessedPlayers", (data) => {
+            const guessedPlayers = data.guessed_players;
+            dispatch(setGuessedPlayers(guessedPlayers));
+        })
+
+        socket.on("showAnswer", (data) => {
+            console.log("Show answer");
+            console.log(data);
+        })
+
+        return () => {
+            socket.off("navigate");
+            socket.off("showQuestion");
+            socket.off("updateGuessedPlayers");
+            socket.off("showAnswer");
+        }
     }, [navigate]);
 
     return (

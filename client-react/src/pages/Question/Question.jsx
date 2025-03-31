@@ -8,14 +8,12 @@ import { useSocket } from "../../helpers/socketContext";
 
 export default function Question() {
     const navigate = useNavigate();
-    const question = useSelector((state) => state.user.question);
+    const question = useSelector((state) => {
+        return state.quiz.question;
+    });
     const [timeLeft, setTimeLeft] = useState(0);
     const { socket } = useSocket();
 
-    const redirectTo = () => {
-        return navigate(`/wait`, { replace: true });
-    };
-    
     const handlePost = async (answerId) => {
         await sendAnswer(answerId);
         navigate(`/wait`, { replace: true });
@@ -29,7 +27,6 @@ export default function Question() {
             }, handleResponse);
 
             function handleResponse(rsp){
-                console.log(rsp);
                 resolve(rsp);
             }
         })
@@ -37,15 +34,13 @@ export default function Question() {
     
     // Question Countdown
     useEffect(() => {
-        console.log(question);
-        
         setTimeLeft(question.time);
-        let cheatTime = question.time;
+        let localTimeLeft = question.time;
 
         const interval = setInterval(() => {
-            if (cheatTime > 0) {
-                cheatTime--;
-                setTimeLeft(cheatTime);
+            if (localTimeLeft > 0) {
+                localTimeLeft--;
+                setTimeLeft(localTimeLeft);
                 return;
             }
 
@@ -67,7 +62,7 @@ export default function Question() {
                 <div className="card flex justify-content-center">
                     {question.answers.map((answer) => {
                         return (
-                            <Button id={answer.id_question} className="question_button" label={answer.answer} onClick={() => handlePost(answer.id_question)}  />
+                            <Button key={answer.answer_id} className="question_button" label={answer.answer} onClick={() => handlePost(answer.answer_id)}  />
                         )
                     })}
                 </div>

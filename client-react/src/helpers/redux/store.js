@@ -22,7 +22,7 @@ const persistConfig = {
 const rootReducer = persistReducer(persistConfig, userReducer);
 
 const store = configureStore({
-    reducer: { user: rootReducer },
+    reducer: { quiz: rootReducer },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: {
