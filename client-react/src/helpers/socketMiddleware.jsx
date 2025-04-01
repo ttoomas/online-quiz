@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "./socketContext";
 import { useDispatch } from "react-redux";
-import { setGuessedPlayers, setQuestion } from "./redux/slice";
+import { setGuessedPlayers, setQuestion, setRoundResults } from "./redux/slice";
 
 export const SocketProvider = ({ children }) => {
     const navigate = useNavigate();
@@ -45,20 +45,23 @@ export const SocketProvider = ({ children }) => {
             dispatch(setGuessedPlayers(guessedPlayers));
         })
 
-        socket.on("showAnswer", (data) => {
-            console.log("Show answer");
-            console.log(data);
-        })
-
-        socket.on("testEmit", () => {
-            console.log("Test emit");
+        socket.on("showRoundResults", (data) => {
+            const roundResults = {
+                title: data.title,
+                totalQuestionNumber: data.number_of_questions,
+                currentQuestionNumber: data.current_question,
+                answers: data.round_answers,
+                results: data.round_results
+            };
+            dispatch(setRoundResults(roundResults));
+            navigate("/round-results", { replace: true });
         })
 
         return () => {
             socket.off("navigate");
             socket.off("showQuestion");
             socket.off("updateGuessedPlayers");
-            socket.off("showAnswer");
+            socket.off("showRoundResults");
         }
     }, [navigate]);
 

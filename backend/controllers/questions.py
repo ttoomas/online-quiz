@@ -4,7 +4,8 @@ import eventlet
 import time
 from db.get_questions import get_quiz_questions
 from helpers.socketio import sio
-from helpers.rooms import rooms, get_room_id_by_sid, find_answer_by_id, update_player_score, get_player_by_sid, update_non_guessed_players
+from helpers.room_helper import rooms, get_room_id_by_sid, find_answer_by_id, update_player_score, get_player_by_sid, update_non_guessed_players
+from helpers.question_helper import get_questions_data, get_round_result_usernames, question_answers_result
 
 def start_questions_loop(sid):
     room_id = get_room_id_by_sid(sid)
@@ -15,42 +16,41 @@ def start_questions_loop(sid):
     rooms[room_id]["status"] = "answering"
     
     # Get questions
-    questions = get_quiz_questions()
-    number_of_questions = len(questions)
-    current_question_index = rooms[room_id]["current_question"]["index"] + 1
-    current_question_id = questions[current_question_index]["question_id"]
-    time_limit = 5
-
-    question1 = {
-        "question": questions[current_question_index]["question"],
-        "answers": questions[current_question_index]["answers"]
-    }
-
-    show_question(room_id, question1["question"], question1["answers"], number_of_questions, current_question_index, current_question_id, time_limit)
+    show_question(room_id)
     
     # Start limit timer
     print("Started task timer")
     rooms[room_id]["question_timer"] = True
-    sio.start_background_task(start_timer, time_limit, room_id)
+    sio.start_background_task(start_timer, room_id)
 
-def start_timer(time_limit, room_id):
+def start_timer(room_id):
+    time_limit = rooms[room_id]["time_limit"]
+
     eventlet.sleep(time_limit)
     if rooms[room_id]["question_timer"] == True:
+        print("called show_answer via timer")
         show_answer(room_id)
     
 
-def show_question(room_id, title, answers_list, number_of_questions, current_question_index, current_question_id, time):
+def show_question(room_id):
+    # Update question index to previous index plus one to work with the new question
+    rooms[room_id]["current_question"]["index"] = rooms[room_id]["current_question"]["index"] + 1    
+
+    # Get data
+    question_data = get_questions_data(room_id)
+    # TODO! sending with true/false if its correct
+    
+    # Update room data
     rooms[room_id]["status"] = "answering"
-    rooms[room_id]["current_player_guessed"] = []
-    rooms[room_id]["current_question"]["index"] = current_question_index
-    rooms[room_id]["current_question"]["question_id"] = current_question_id
+    rooms[room_id]["round_results"] = []
+    rooms[room_id]["current_question"]["question_id"] = question_data["question_id"]
     
     sio.emit("showQuestion", {
-        "title": title,
-        "answers_list": answers_list,
-        "number_of_questions": number_of_questions,
-        "current_question": current_question_index + 1,
-        "time": time
+        "title": question_data["title"],
+        "answers_list": question_data["answers_list"],
+        "number_of_questions": question_data["number_of_questions"],
+        "current_question": question_data["current_question"] + 1,
+        "time": question_data["time"]
     }, room=room_id)
 
 def show_answer(room_id):
@@ -68,11 +68,22 @@ def show_answer(room_id):
     rooms[room_id]["status"] = "showing_answer"
 
     # Emit the answer to each player
-    print("Sending show answer")
+    question_data = get_questions_data(room_id)
+    player_data = {
+        "title": question_data["title"],
+        "current_question": question_data["current_question"],
+        "number_of_questions": question_data["number_of_questions"],
+        "round_results": rooms[room_id]["round_results"],
+        "round_answers": None
+    }
+    
     for player in rooms[room_id]["players"]:
-        sio.emit("showAnswer", {
-            "sid": player["sid"]
-        }, room=player["sid"])
+        current_player_data = player_data.copy()
+        current_player_data["round_answers"] = question_answers_result(room_id, player["sid"])
+        print("Round answers")
+        print(current_player_data["round_answers"])
+        
+        sio.emit("showRoundResults", current_player_data, room=player["sid"])
 
 def send_answer(sid, data):
     print("Received answer")
@@ -99,17 +110,13 @@ def send_answer(sid, data):
 
     update_player_score(room_id, sid, question_id, answer_id, is_answer_correct)
 
-    # Update guessed players
-    current_user = get_player_by_sid(sid)
-
-    if current_user is not None:
-        rooms[room_id]["current_player_guessed"].append(current_user["username"])
-    
     # If all players guessed, show answer
     # Else emit the guessed players
-    if len(rooms[room_id]["current_player_guessed"]) == len(rooms[room_id]["players"]):
+    if len(rooms[room_id]["round_results"]) == len(rooms[room_id]["players"]):
         show_answer(room_id)
     else:
+        round_usernames = get_round_result_usernames(room_id)
+        
         sio.emit("updateGuessedPlayers", {
-            "guessed_players": rooms[room_id]["current_player_guessed"],
+            "guessed_players": round_usernames,
         }, room=room_id)

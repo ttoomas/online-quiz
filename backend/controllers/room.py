@@ -3,7 +3,7 @@ import jwt
 from env import JWT_SECRET
 from helpers.role_check import only_admin, only_player
 from helpers.socketio import sio
-from helpers.rooms import rooms, get_room_id_by_sid, create_room_var, add_player_to_room
+from helpers.room_helper import rooms, get_room_id_by_sid, create_room_var, add_player_to_room
 
 # @only_player
 def joinRoom(sid, data):

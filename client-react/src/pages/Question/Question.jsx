@@ -14,22 +14,16 @@ export default function Question() {
     const [timeLeft, setTimeLeft] = useState(0);
     const { socket } = useSocket();
 
-    const handlePost = async (answerId) => {
-        await sendAnswer(answerId);
+    const handlePost = (answerId) => {
+        sendAnswer(answerId);
         navigate(`/wait`, { replace: true });
     };
 
     // Socket
-    async function sendAnswer(answerId){
-        return new Promise((resolve, reject) => {
-            socket.emit("sendAnswer", {
-                answer_id: answerId
-            }, handleResponse);
-
-            function handleResponse(rsp){
-                resolve(rsp);
-            }
-        })
+    function sendAnswer(answerId){
+        socket.emit("sendAnswer", {
+            answer_id: answerId
+        });
     }
     
     // Question Countdown

@@ -1,6 +1,6 @@
 import eventlet
 from helpers.socketio import sio, app
-from helpers.rooms import rooms
+from helpers.room_helper import rooms
 from controllers.room import joinRoom, getRoomPlayers, create_room
 from controllers.load import check_jwt_token, init_client
 from controllers.questions import start_questions_loop, send_answer

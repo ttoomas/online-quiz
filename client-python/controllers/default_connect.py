@@ -39,10 +39,6 @@ def init():
         guessed_players = data["guessed_players"]
         update_guessing_players(guessed_players)
     
-    @sio.on('testEmit')
-    def test():
-        print("Test emit received")
-
     sio.connect('http://localhost:5100')
     
     wait_thread = threading.Thread(target=sio.wait)

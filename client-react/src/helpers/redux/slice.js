@@ -11,6 +11,13 @@ const quizSlice = createSlice({
             time: 0,
         },
         guessedPlayers: [],
+        roundResults: {
+            title: "",
+            totalQuestionNumber: 0,
+            currentQuestionNumber: 0,
+            answers: [],
+            results: [],
+        }
     },
     reducers: {
         setQuestion: (state, action) => {
@@ -19,8 +26,11 @@ const quizSlice = createSlice({
         setGuessedPlayers: (state, action) => {
             state.guessedPlayers = action.payload; // Update the guessed players state with the payload
         },
+        setRoundResults: (state, action) => {
+            state.roundResults = action.payload; // Update the round results state with the payload
+        },
     },
 });
 
-export const { setQuestion, setGuessedPlayers } = quizSlice.actions;
+export const { setQuestion, setGuessedPlayers, setRoundResults } = quizSlice.actions;
 export default quizSlice.reducer;

@@ -9,9 +9,14 @@ rooms dictionary structure:
             "index": -1,
             "question_id": "question_id",
         },
-        "current_player_guessed": ["username1"],
+        "round_results": [{
+            "username": "player_username",
+            "score": 0,
+            "is_correct": true / false
+        }],
         "question_timer": None,
         "admin": "admin_sid",
+        "time_limit": int in seconds,
         "players": [
             {
                 "sid": "player_sid",
@@ -42,8 +47,9 @@ def create_room_var(room_uuid, admin_sid):
             "index": -1,
             "question_id": None
         },
-        "current_player_guessed": [],
+        "round_results": [],
         "admin": admin_sid,
+        "time_limit": 10,
         "players": []
     }
 
@@ -76,11 +82,20 @@ def find_answer_by_id(answers_list, answer_id):
 def update_player_score(room_id, player_sid, question_id, answer_id, is_correct):
     for player in rooms[room_id]["players"]:
         if player["sid"] == player_sid:
+            print(player)
+            
             player["score"] += 1 if is_correct else 0
             player["questions"].append({
                 "question_id": question_id,
                 "answer_id": answer_id,
                 "correct": is_correct
+            })
+
+            # Update round results
+            rooms[room_id]["round_results"].append({
+                "username": player["username"],
+                "score": player["score"],
+                "is_correct": is_correct
             })
             
             break

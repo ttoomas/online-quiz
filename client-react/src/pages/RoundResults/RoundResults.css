@@ -1,0 +1,76 @@
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 25vh;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+
+.otazka {
+  margin-bottom: 4em;
+  text-align: center;
+}
+
+.question_button {
+  margin: 8px;
+  background-color: white;
+  color: black;
+  border-color: white;
+}
+
+.question_button:hover {
+  background-color: rgb(189, 223, 243);
+  border-color: rgb(129, 188, 223);
+}
+
+.otazky {
+  margin-top: 5em;
+}
+
+.answer{
+  color: black;
+  padding: 10px 16px;
+  border-radius: 10px;
+  margin: 6px;
+}
+.answer.correct,
+.answer.incorrect {
+  color: white;
+}
+.answer.correct {
+  background-color: green;
+}
+.answer.incorrect {
+  background-color: red;
+}
+
+.roundResults__title{
+  text-align: center;
+  margin-block: 38px 16px;
+  font-size: 32px;
+}
+.roundResults__players{
+  display: flex;
+  flex-direction: column;
+  row-gap: 14px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 20px;
+  
+}
+.roundResults__player{
+  margin: 0;
+  font-weight: 500;
+}
+.roundResults__player.correct{
+  color: green;
+}
+.roundResults__player.incorrect{
+  color: red;
+}
