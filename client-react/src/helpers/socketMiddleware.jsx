@@ -50,6 +50,10 @@ export const SocketProvider = ({ children }) => {
             console.log(data);
         })
 
+        socket.on("testEmit", () => {
+            console.log("Test emit");
+        })
+
         return () => {
             socket.off("navigate");
             socket.off("showQuestion");

@@ -1,4 +1,7 @@
+import asyncio
 import threading
+import eventlet
+import time
 from db.get_questions import get_quiz_questions
 from helpers.socketio import sio
 from helpers.rooms import rooms, get_room_id_by_sid, find_answer_by_id, update_player_score, get_player_by_sid, update_non_guessed_players
@@ -16,19 +19,25 @@ def start_questions_loop(sid):
     number_of_questions = len(questions)
     current_question_index = rooms[room_id]["current_question"]["index"] + 1
     current_question_id = questions[current_question_index]["question_id"]
-    time = 5
+    time_limit = 5
 
     question1 = {
         "question": questions[current_question_index]["question"],
         "answers": questions[current_question_index]["answers"]
     }
 
-    show_question(room_id, question1["question"], question1["answers"], number_of_questions, current_question_index, current_question_id, time)
+    show_question(room_id, question1["question"], question1["answers"], number_of_questions, current_question_index, current_question_id, time_limit)
     
     # Start limit timer
-    t = threading.Timer(time, show_answer, args=[room_id])
-    t.start()
-    rooms[room_id]["question_timer"] = t
+    print("Started task timer")
+    rooms[room_id]["question_timer"] = True
+    sio.start_background_task(start_timer, time_limit, room_id)
+
+def start_timer(time_limit, room_id):
+    eventlet.sleep(time_limit)
+    if rooms[room_id]["question_timer"] == True:
+        show_answer(room_id)
+    
 
 def show_question(room_id, title, answers_list, number_of_questions, current_question_index, current_question_id, time):
     rooms[room_id]["status"] = "answering"
@@ -45,35 +54,25 @@ def show_question(room_id, title, answers_list, number_of_questions, current_que
     }, room=room_id)
 
 def show_answer(room_id):
-    # if rooms[room_id]["status"] != "answering":
-    #     return
+    if rooms[room_id]["status"] != "answering":
+        return
 
     # Cancel the timer
-    # timer = rooms[room_id]["question_timer"]
-    # if timer is not None:
-    #     timer.cancel()
-    #     rooms[room_id]["question_timer"] = None
-
-    print(sio)
+    if rooms[room_id]["question_timer"] is True:
+        rooms[room_id]["question_timer"] = False
 
     # Update questions of each player who not guessed
     update_non_guessed_players(room_id)
-
-    # TODO! THE ANSWER IS NOT SHOWING WHEN ITS CALLED VIA TIMER
 
     # Show answer
     rooms[room_id]["status"] = "showing_answer"
 
     # Emit the answer to each player
+    print("Sending show answer")
     for player in rooms[room_id]["players"]:
-        print("Show answer - ", player["sid"])
-        print("is connected - ", sio.server.manager.is_connected(player["sid"]))
         sio.emit("showAnswer", {
             "sid": player["sid"]
         }, room=player["sid"])
-
-    # sio.emit("showAnswer", room=room_id)
-    print("show answer - ", room_id)
 
 def send_answer(sid, data):
     print("Received answer")
