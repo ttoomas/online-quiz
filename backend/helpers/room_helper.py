@@ -23,6 +23,7 @@ rooms dictionary structure:
                 "username": "player_username",
                 "uuid": "player_uuid",
                 "score": 0,
+                "correct_answers": 0,
                 "questions": [
                     {
                         "question_id": "question_id",
@@ -85,6 +86,7 @@ def update_player_score(room_id, player_sid, question_id, answer_id, is_correct)
             print(player)
             
             player["score"] += 1 if is_correct else 0
+            player["correct_answers"] += 1 if is_correct else 0
             player["questions"].append({
                 "question_id": question_id,
                 "answer_id": answer_id,

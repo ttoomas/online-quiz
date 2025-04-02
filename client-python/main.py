@@ -34,7 +34,8 @@ def show_results_handler():
     round_results_actions["show"]()
 
 def next_round_handler():
-    print("Next round")
+    print("Next round started")
+    start_questions()
 
 # FRAME ACTIONS
 home_frame_actions = home_frame(root, create_quiz_handler, show_waiting_handler)

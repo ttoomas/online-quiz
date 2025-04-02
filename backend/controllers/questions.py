@@ -5,7 +5,7 @@ import time
 from db.get_questions import get_quiz_questions
 from helpers.socketio import sio
 from helpers.room_helper import rooms, get_room_id_by_sid, find_answer_by_id, update_player_score, get_player_by_sid, update_non_guessed_players
-from helpers.question_helper import get_questions_data, get_round_result_usernames, question_answers_result
+from helpers.question_helper import get_questions_data, get_round_result_usernames, question_answers_result, get_total_quiz_results
 
 def start_questions_loop(sid):
     room_id = get_room_id_by_sid(sid)
@@ -64,6 +64,35 @@ def show_answer(room_id):
     # Update questions of each player who not guessed
     update_non_guessed_players(room_id)
 
+    # Check if the game is over
+    questions_length = len(get_quiz_questions())
+    
+    if rooms[room_id]["current_question"]["index"] >= questions_length:
+        # End the game
+        # Show quiz results
+        show_quiz_results(room_id)
+    else:
+        # Show the round answers
+        show_round_results(room_id)
+
+def show_quiz_results(room_id):
+    rooms[room_id]["status"] = "showing_results"
+
+    # Emit the answer to each player
+    total_player_results = get_total_quiz_results(room_id)
+    questions_length = len(get_quiz_questions())
+
+    data = {
+        "number_of_questions": questions_length,
+        "total_players": len(rooms[room_id]["players"]),
+    }
+    
+    for player in rooms[room_id]["players"]:
+        # current_player_data = player_data.copy()
+        # current_player_data["round_answers"] = 
+
+
+def show_round_results(room_id):
     # Show answer
     rooms[room_id]["status"] = "showing_answer"
 

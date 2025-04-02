@@ -54,3 +54,21 @@ def question_answers_result(room_id, player_sid):
         })
         
     return result
+
+def get_total_quiz_results(room_id):
+    results = []
+
+    # Check
+    for player in rooms[room_id]["players"]:
+        results.append({
+            "position": -1,
+            "username": player["username"],
+            "score": player["score"],
+        })
+    
+    # Update positions
+    results.sort(key=lambda x: x["score"], reverse=True)
+    for i, player in enumerate(results):
+        player["position"] = i + 1
+    
+    return results

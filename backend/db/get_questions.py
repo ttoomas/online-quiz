@@ -24,6 +24,58 @@ quiz_questions = [
                 "correct": False
             }
         ]
+    },
+    {
+        "question": "What is the largest planet in our solar system?",
+        "question_id": "2",
+        "answers": [
+            {
+                "answer": "Jupiter",
+                "answer_id": "5",
+                "correct": True
+            },
+            {
+                "answer": "Mars",
+                "answer_id": "6",
+                "correct": False
+            },
+            {
+                "answer": "Saturn",
+                "answer_id": "7",
+                "correct": False
+            },
+            {
+                "answer": "Venus",
+                "answer_id": "8",
+                "correct": False
+            }
+        ]
+    },
+    {
+        "question": "Who painted the Mona Lisa?",
+        "question_id": "3",
+        "answers": [
+            {
+                "answer": "Leonardo da Vinci",
+                "answer_id": "9",
+                "correct": True
+            },
+            {
+                "answer": "Pablo Picasso",
+                "answer_id": "10",
+                "correct": False
+            },
+            {
+                "answer": "Vincent van Gogh",
+                "answer_id": "11",
+                "correct": False
+            },
+            {
+                "answer": "Michelangelo",
+                "answer_id": "12",
+                "correct": False
+            }
+        ]
     }
 ]
 

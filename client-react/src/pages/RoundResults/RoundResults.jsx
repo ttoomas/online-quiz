@@ -3,7 +3,6 @@ import "./RoundResults.css";
 
 export default function RoundResults() {
     const roundResults = useSelector((state) => {
-        console.log(state.quiz.roundResults)
         return state.quiz.roundResults;
     });
 
