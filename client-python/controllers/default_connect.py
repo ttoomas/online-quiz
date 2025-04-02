@@ -3,6 +3,7 @@ import threading
 from frames.waiting_room import update_waiting_players
 from frames.home_frame import update_quiz_list
 from frames.guessing_room import update_guessing_players, update_guessing_title, start_guessing_time
+from frames.round_results import show_round_results
 
 
 SIO = None
@@ -38,6 +39,11 @@ def init():
     def update_guessed_players(data):
         guessed_players = data["guessed_players"]
         update_guessing_players(guessed_players)
+    
+    @sio.on('showRoundResults')
+    def show_round_results_handler(data):
+        round_results = data["round_results"]
+        show_round_results(round_results)
     
     sio.connect('http://localhost:5100')
     

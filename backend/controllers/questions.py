@@ -77,13 +77,17 @@ def show_answer(room_id):
         "round_answers": None
     }
     
+    # Send the answer to each player
     for player in rooms[room_id]["players"]:
         current_player_data = player_data.copy()
         current_player_data["round_answers"] = question_answers_result(room_id, player["sid"])
-        print("Round answers")
-        print(current_player_data["round_answers"])
         
         sio.emit("showRoundResults", current_player_data, room=player["sid"])
+    
+    # Send answer to admin
+    sio.emit("showRoundResults", {
+        "round_results": player_data["round_results"]
+    }, room=rooms[room_id]["admin"])
 
 def send_answer(sid, data):
     print("Received answer")

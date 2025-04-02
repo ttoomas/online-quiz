@@ -15,7 +15,7 @@ export default function RoundResults() {
                 <h1>{roundResults.title}</h1>
                 <div className="card flex justify-content-center">
                     {roundResults.answers.map((answer) => (
-                        <p key={answer.answer_id} className={
+                        <p key={answer.answer} className={
                             "answer " + (
                                 answer.is_correct == true ? "correct" : (
                                     answer.is_correct == false ? "incorrect" : ""

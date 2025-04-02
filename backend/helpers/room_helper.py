@@ -124,3 +124,9 @@ def update_non_guessed_players(room_id):
                 "answer_id": None,
                 "correct": False
             })
+
+            rooms[room_id]["round_results"].append({
+                "username": player["username"],
+                "score": player["score"],
+                "is_correct": False
+            })

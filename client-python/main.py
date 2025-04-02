@@ -7,7 +7,6 @@ from frames.create_quiz import create_quiz
 from frames.waiting_room import waiting_screen
 from frames.guessing_room import guessing_room
 from frames.round_results import round_results
-from frames.round_results import activate_round_results
 
 
 
@@ -30,19 +29,19 @@ def start_quiz_handler():
     waiting_actions["hide"]()
     guessing_actions["show"]()
 
-# def show_results_handler():
-#     guessing_actions["hide"]()
-#     results_actions["show"]([
-#         { "user": "pepa", "points": 10 },
-#         { "user": "karel", "points": 5 }
-#     ])
+def show_results_handler():
+    guessing_actions["hide"]()
+    round_results_actions["show"]()
+
+def next_round_handler():
+    print("Next round")
 
 # FRAME ACTIONS
 home_frame_actions = home_frame(root, create_quiz_handler, show_waiting_handler)
 create_quiz_actions = create_quiz(root)
 waiting_actions = waiting_screen(root, start_quiz_handler)
 guessing_actions = guessing_room(root)
-results_actions = round_results(root)
+round_results_actions = round_results(root, next_round_handler, guessing_actions["hide"])
 
 # Close window and connection
 def closeWindow():
