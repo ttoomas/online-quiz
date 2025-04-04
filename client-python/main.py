@@ -38,9 +38,13 @@ def next_round_handler():
     print("Next round started")
     start_questions()
 
+def hide_create_quiz_handler():
+    create_quiz_actions["hide"]()
+    home_frame_actions["show"]()
+
 # FRAME ACTIONS
 home_frame_actions = home_frame(root, create_quiz_handler, show_waiting_handler)
-create_quiz_actions = create_quiz(root)
+create_quiz_actions = create_quiz(root, hide_create_quiz_handler)
 waiting_actions = waiting_screen(root, start_quiz_handler)
 guessing_actions = guessing_room(root)
 round_results_actions = round_results(root, next_round_handler, guessing_actions["hide"])

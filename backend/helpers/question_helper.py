@@ -2,7 +2,7 @@ from helpers.room_helper import rooms, get_player_by_sid
 from db.get_questions import get_quiz_questions
 
 def get_questions_data(room_id):
-    questions = get_quiz_questions()
+    questions = get_quiz_questions(room_id)
     number_of_questions = len(questions)
     current_question_index = rooms[room_id]["current_question"]["index"]
     current_question_id = questions[current_question_index]["question_id"]

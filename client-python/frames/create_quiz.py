@@ -1,17 +1,18 @@
 import tkinter as tk
 from tkinter import messagebox
 from helpers import create_frame
+from controllers.default_connect import get_sio
 
-def create_quiz(root):
+def create_quiz(root, hide_create_quiz_handler):
     # Frame
     frame_data = create_frame(root, "")
     frame = frame_data["frame"]
 
-    activate_create_quiz(frame)
+    activate_create_quiz(frame, hide_create_quiz_handler)
 
     return frame_data
 
-def activate_create_quiz(root):
+def activate_create_quiz(root, hide_create_quiz_handler):
     for widget in root.winfo_children():
         widget.grid_forget()
 
@@ -103,8 +104,20 @@ def activate_create_quiz(root):
                 question_data["answers"].append({"answer": answer_text, "correct": is_correct})
             quiz_data["questions"].append(question_data)
 
-        print(quiz_data)
-        messagebox.showinfo("Info", f"Kvíz vytvořen: {quiz_data}")
+        emit_create_quiz(quiz_data)
+        hide_create_quiz_handler()
 
     # Tlačítko pro vytvoření kvízu
     tk.Button(scroll_frame, text="Vytvořit kvíz", command=create_quiz).pack(side="bottom", pady=75)
+
+
+def emit_create_quiz(quiz_data):
+    sio = get_sio()
+    
+    sio.emit("createQuiz", {
+        "quiz_data": quiz_data
+    }, callback=update_quiz_list)
+
+def update_quiz_list(data):
+    new_quiz_name = data["name"]
+    new_quiz_uuid = data["uuid"]

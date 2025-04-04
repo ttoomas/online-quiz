@@ -71,7 +71,10 @@ def init_client(sid, data):
             "role": "admin"
         })
 
+
         quiz_list = get_quiz_list()
+        print("quiz list: ")
+        print(quiz_list)
 
         return {
             'success': True,

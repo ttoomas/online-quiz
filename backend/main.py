@@ -4,6 +4,7 @@ from helpers.room_helper import rooms
 from controllers.room import joinRoom, getRoomPlayers, create_room
 from controllers.load import check_jwt_token, init_client
 from controllers.questions import start_questions_loop, send_answer
+from controllers.create_quiz import create_quiz_controller
 
 
 # SOCKET.IO EVENTS
@@ -33,6 +34,13 @@ sio.on('sendAnswer', send_answer)
 sio.on("createRoom", create_room)
 sio.on("startQuiz", start_questions_loop)
 
+sio.on("createQuiz", create_quiz_controller)
+
 # RUN THE SERVER
 if __name__ == '__main__':
     eventlet.wsgi.server(eventlet.listen(('', 5100)), app)
+
+
+# from db.get_questions import get_quiz_questions
+# from db.quiz_list import get_quiz_list
+# from db.create_quiz import create_quiz

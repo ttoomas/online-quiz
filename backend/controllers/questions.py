@@ -62,7 +62,7 @@ def show_answer(room_id):
     update_non_guessed_players(room_id)
 
     # Check if the game is over
-    questions_length = len(get_quiz_questions())
+    questions_length = len(get_quiz_questions(room_id))
 
     if rooms[room_id]["current_question"]["index"] + 1 >= questions_length:
         # End the game
@@ -78,7 +78,7 @@ def show_quiz_results(room_id):
 
     # Emit the answer to each player
     total_player_results = get_total_quiz_results(room_id)
-    questions_length = len(get_quiz_questions())
+    questions_length = len(get_quiz_questions(room_id))
 
     data = {
         "number_of_questions": questions_length,
@@ -141,7 +141,7 @@ def send_answer(sid, data):
     
     # Check, if the answer is correct
     current_question_index = rooms[room_id]["current_question"]["index"]
-    question_list = get_quiz_questions()
+    question_list = get_quiz_questions(room_id)
     current_question = question_list[current_question_index]
     current_answer = find_answer_by_id(current_question["answers"], answer_id)
 

@@ -49,7 +49,9 @@ def update_quiz_list(quiz_list):
     root = frame
 
     # Clear existing widgets
-    for widget in frame.winfo_children():
+    for index, widget in enumerate(frame.winfo_children()):
+        if index == 0 or index == 1:
+            continue
         widget.grid_forget()
 
     
@@ -76,3 +78,23 @@ def update_quiz_list(quiz_list):
     root.grid_columnconfigure(3, weight=3)
     root.grid_columnconfigure(4, weight=1)
     root.grid_columnconfigure(5, weight=1)
+
+def add_quiz(name, uuid):
+    global frame
+    global show_waiting_handler_global
+
+    root = frame
+    last_index = len(root.winfo_children())
+
+    row = 1 + (last_index // 2)
+    column = 1 if last_index % 2 == 0 else 3
+
+    # Rámeček pro kvíz
+    frame = tk.Frame(root, bd=2, relief="solid", padx=10, pady=10)
+    frame.grid(row=row, column=column, padx=10, pady=10, sticky="nsew")
+
+    label_title = tk.Label(frame, text=name, font=("Arial", 14, "bold"))
+    label_title.pack(anchor="center")
+
+    link_button = tk.Button(frame, text=f"Spustit kvíz", fg="white", bg="black", bd=0, font=("Arial", 12), command=lambda: show_waiting_handler_global(uuid))
+    link_button.pack(side="bottom", anchor="center", pady=10)
