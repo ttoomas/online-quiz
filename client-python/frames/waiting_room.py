@@ -3,9 +3,11 @@ from helpers import create_frame
 
 
 frame = None
+frame_data = None
 
 def waiting_screen(root, start_quiz_handler):
     global frame
+    global frame_data
     
     # Frame
     frame_data = create_frame(root, "")

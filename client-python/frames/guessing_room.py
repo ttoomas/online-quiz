@@ -3,9 +3,11 @@ from helpers import create_frame
 
 
 frame = None
+frame_data = None
 
 def guessing_room(root):
     global frame
+    global frame_data
     
     # Frame
     frame_data = create_frame(root, "")
@@ -20,6 +22,11 @@ def guessing_room(root):
         "show": show_frame,
         "hide": hide_frame,
     }
+
+def show_guessing_room():
+    global frame_data
+
+    frame_data["show"]()
 
 def activate_guessing_room():
     global frame

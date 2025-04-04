@@ -3,12 +3,10 @@ from helpers import create_frame
 
 
 frame = None
-frame_data = None
 hide_guessing_room = None
 
-def round_results(root, next_round_handler, hide_guessing_room_handler):
+def quiz_results(root, hide_guessing_room_handler):
     global frame
-    global frame_data
     global hide_guessing_room
 
     hide_guessing_room = hide_guessing_room_handler
@@ -19,7 +17,7 @@ def round_results(root, next_round_handler, hide_guessing_room_handler):
     show_frame = frame_data["show"]
     hide_frame = frame_data["hide"]
 
-    activate_round_results(next_round_handler)
+    activate_quiz_results()
 
     return {
         "frame": frame,
@@ -27,18 +25,14 @@ def round_results(root, next_round_handler, hide_guessing_room_handler):
         "hide": hide_frame
     }
 
-def hide_round_results():
-    global frame_data
-
-    frame_data["hide"]()
-
-def activate_round_results(next_round_handler):
+def activate_quiz_results():
     global frame
     
     for widget in frame.winfo_children():
         widget.destroy()
 
-    title_label = tk.Label(frame, text="Round Results", font=("Helvetica", 16))
+    
+    title_label = tk.Label(frame, text="Quiz finished!", font=("Helvetica", 16))
     title_label.pack(pady=10)
 
     results_label = tk.Label(frame, text="Results: ", font=("Helvetica", 12))
@@ -47,10 +41,7 @@ def activate_round_results(next_round_handler):
     results_listbox = tk.Listbox(frame)
     results_listbox.pack(pady=10)
 
-    next_round_button = tk.Button(frame, text="Start Next Round", command=next_round_handler)
-    next_round_button.pack(pady=20)
-
-def show_round_results(results):
+def show_quiz_results(results):
     global frame
     global hide_guessing_room
 
@@ -65,4 +56,9 @@ def show_round_results(results):
 
     # Add the new results
     for result in results:
-        results_listbox.insert(tk.END, f"{result['username']} - {result['score']} points")
+        results_listbox.insert(tk.END, f"Position {result['position']}. - {result['username']} - {result['score']} points")
+    
+    
+    # Dynamically adjust the Listbox size
+    max_width = max((len(f"Position {result['position']}. - {result['username']} - {result['score']} points") for result in results), default=0)
+    results_listbox.config(width=max_width, height=len(results))

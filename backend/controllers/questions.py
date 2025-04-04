@@ -18,22 +18,16 @@ def start_questions_loop(sid):
     # Get questions
     show_question(room_id)
     
-    
     # Start limit timer
     # Current index is updated in show_question method
-    print("Started task timer")
     rooms[room_id]["timer_index"] = rooms[room_id]["current_question"]["index"]
-    print("Called timer question index: ", rooms[room_id]["current_question"]["index"])
     sio.start_background_task(start_timer, room_id)
 
 def start_timer(room_id):
     time_limit = rooms[room_id]["time_limit"]
     current_question_index = rooms[room_id]["current_question"]["index"]
     
-    print("Started timer question index: ", rooms[room_id]["current_question"]["index"])
-
     eventlet.sleep(time_limit)
-    print("Timer finished")
     if rooms[room_id]["timer_index"] == current_question_index:
         print("called show_answer via timer")
         show_answer(room_id)
@@ -42,8 +36,6 @@ def start_timer(room_id):
 def show_question(room_id):
     # Update question index to previous index plus one to work with the new question
     rooms[room_id]["current_question"]["index"] = rooms[room_id]["current_question"]["index"] + 1
-    
-    print("Show question index: ", rooms[room_id]["current_question"]["index"])
     
     # Get data
     question_data = get_questions_data(room_id)
@@ -72,9 +64,6 @@ def show_answer(room_id):
     # Check if the game is over
     questions_length = len(get_quiz_questions())
 
-    print("Show answer: ", rooms[room_id]["current_question"]["index"])
-
-    
     if rooms[room_id]["current_question"]["index"] + 1 >= questions_length:
         # End the game
         # Show quiz results
@@ -107,6 +96,11 @@ def show_quiz_results(room_id):
         current_player_data["player_position"] = index + 1
 
         sio.emit("showQuizResults", current_player_data, room=player_sid)
+    
+    # Send results to admin
+    sio.emit("showQuizResults", {
+        "results": data["total_results"]
+    }, room=rooms[room_id]["admin"])
 
 def show_round_results(room_id):
     # Show answer
@@ -146,8 +140,6 @@ def send_answer(sid, data):
         return
     
     # Check, if the answer is correct
-    print("Send answer index: ", rooms[room_id]["current_question"]["index"])
-
     current_question_index = rooms[room_id]["current_question"]["index"]
     question_list = get_quiz_questions()
     current_question = question_list[current_question_index]
