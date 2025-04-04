@@ -18,24 +18,33 @@ def start_questions_loop(sid):
     # Get questions
     show_question(room_id)
     
+    
     # Start limit timer
+    # Current index is updated in show_question method
     print("Started task timer")
-    rooms[room_id]["question_timer"] = True
+    rooms[room_id]["timer_index"] = rooms[room_id]["current_question"]["index"]
+    print("Called timer question index: ", rooms[room_id]["current_question"]["index"])
     sio.start_background_task(start_timer, room_id)
 
 def start_timer(room_id):
     time_limit = rooms[room_id]["time_limit"]
+    current_question_index = rooms[room_id]["current_question"]["index"]
+    
+    print("Started timer question index: ", rooms[room_id]["current_question"]["index"])
 
     eventlet.sleep(time_limit)
-    if rooms[room_id]["question_timer"] == True:
+    print("Timer finished")
+    if rooms[room_id]["timer_index"] == current_question_index:
         print("called show_answer via timer")
         show_answer(room_id)
     
 
 def show_question(room_id):
     # Update question index to previous index plus one to work with the new question
-    rooms[room_id]["current_question"]["index"] = rooms[room_id]["current_question"]["index"] + 1    
-
+    rooms[room_id]["current_question"]["index"] = rooms[room_id]["current_question"]["index"] + 1
+    
+    print("Show question index: ", rooms[room_id]["current_question"]["index"])
+    
     # Get data
     question_data = get_questions_data(room_id)
     # TODO! sending with true/false if its correct
@@ -49,7 +58,7 @@ def show_question(room_id):
         "title": question_data["title"],
         "answers_list": question_data["answers_list"],
         "number_of_questions": question_data["number_of_questions"],
-        "current_question": question_data["current_question"] + 1,
+        "current_question": question_data["current_question"],
         "time": question_data["time"]
     }, room=room_id)
 
@@ -57,17 +66,16 @@ def show_answer(room_id):
     if rooms[room_id]["status"] != "answering":
         return
 
-    # Cancel the timer
-    if rooms[room_id]["question_timer"] is True:
-        rooms[room_id]["question_timer"] = False
-
     # Update questions of each player who not guessed
     update_non_guessed_players(room_id)
 
     # Check if the game is over
     questions_length = len(get_quiz_questions())
+
+    print("Show answer: ", rooms[room_id]["current_question"]["index"])
+
     
-    if rooms[room_id]["current_question"]["index"] >= questions_length:
+    if rooms[room_id]["current_question"]["index"] + 1 >= questions_length:
         # End the game
         # Show quiz results
         show_quiz_results(room_id)
@@ -76,6 +84,7 @@ def show_answer(room_id):
         show_round_results(room_id)
 
 def show_quiz_results(room_id):
+    print("SHOW QUIZ RESULTS")
     rooms[room_id]["status"] = "showing_results"
 
     # Emit the answer to each player
@@ -85,12 +94,19 @@ def show_quiz_results(room_id):
     data = {
         "number_of_questions": questions_length,
         "total_players": len(rooms[room_id]["players"]),
+        "total_results": total_player_results,
+        "player_position": -1,
+        "correct_answers": -1
     }
-    
-    for player in rooms[room_id]["players"]:
-        # current_player_data = player_data.copy()
-        # current_player_data["round_answers"] = 
 
+    for index, result in enumerate(total_player_results):
+        current_player_data = data.copy()
+        player_sid = result["sid"]
+        player = get_player_by_sid(player_sid)
+        current_player_data["correct_answers"] = player["correct_answers"]
+        current_player_data["player_position"] = index + 1
+
+        sio.emit("showQuizResults", current_player_data, room=player_sid)
 
 def show_round_results(room_id):
     # Show answer
@@ -130,6 +146,8 @@ def send_answer(sid, data):
         return
     
     # Check, if the answer is correct
+    print("Send answer index: ", rooms[room_id]["current_question"]["index"])
+
     current_question_index = rooms[room_id]["current_question"]["index"]
     question_list = get_quiz_questions()
     current_question = question_list[current_question_index]

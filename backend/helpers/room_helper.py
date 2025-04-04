@@ -14,7 +14,7 @@ rooms dictionary structure:
             "score": 0,
             "is_correct": true / false
         }],
-        "question_timer": None,
+        "timer_index": -1,
         "admin": "admin_sid",
         "time_limit": int in seconds,
         "players": [
@@ -60,6 +60,7 @@ def add_player_to_room(room_id, sid, user_name, user_uuid):
         "username": user_name,
         "uuid": user_uuid,
         "score": 0,
+        "correct_answers": 0,
         "questions": []
     })
 

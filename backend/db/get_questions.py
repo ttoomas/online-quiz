@@ -51,32 +51,32 @@ quiz_questions = [
             }
         ]
     },
-    {
-        "question": "Who painted the Mona Lisa?",
-        "question_id": "3",
-        "answers": [
-            {
-                "answer": "Leonardo da Vinci",
-                "answer_id": "9",
-                "correct": True
-            },
-            {
-                "answer": "Pablo Picasso",
-                "answer_id": "10",
-                "correct": False
-            },
-            {
-                "answer": "Vincent van Gogh",
-                "answer_id": "11",
-                "correct": False
-            },
-            {
-                "answer": "Michelangelo",
-                "answer_id": "12",
-                "correct": False
-            }
-        ]
-    }
+    # {
+    #     "question": "Who painted the Mona Lisa?",
+    #     "question_id": "3",
+    #     "answers": [
+    #         {
+    #             "answer": "Leonardo da Vinci",
+    #             "answer_id": "9",
+    #             "correct": True
+    #         },
+    #         {
+    #             "answer": "Pablo Picasso",
+    #             "answer_id": "10",
+    #             "correct": False
+    #         },
+    #         {
+    #             "answer": "Vincent van Gogh",
+    #             "answer_id": "11",
+    #             "correct": False
+    #         },
+    #         {
+    #             "answer": "Michelangelo",
+    #             "answer_id": "12",
+    #             "correct": False
+    #         }
+    #     ]
+    # }
 ]
 
 

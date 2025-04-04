@@ -18,25 +18,25 @@ const GlobalWrapper = ({ children }) => {
     }, []);
 
     async function handlePageLoad() {
-        // const jwtToken = cookies["quiz-token"];
+        const jwtToken = cookies["quiz-token"];
 
-        // if (!jwtToken) {
-        //     navigate("/", { replace: true });
-        //     deleteCookie("quiz-token");
-        //     setLoading(false);
-        //     return;
-        // }
+        if (!jwtToken) {
+            navigate("/", { replace: true });
+            deleteCookie("quiz-token");
+            setLoading(false);
+            return;
+        }
 
-        // const result = await checkToken(jwtToken["token"]);
+        const result = await checkToken(jwtToken["token"]);
 
-        // if (!result.success) {
-        //     navigate("/", { replace: true });
-        //     deleteCookie("quiz-token");
-        //     setLoading(false);
-        //     return;
-        // }
+        if (!result.success) {
+            navigate("/", { replace: true });
+            deleteCookie("quiz-token");
+            setLoading(false);
+            return;
+        }
 
-        // navigate(PageStatuses[result.status], { replace: true });
+        navigate(PageStatuses[result.status], { replace: true });
         setLoading(false);
     }
 

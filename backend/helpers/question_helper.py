@@ -64,6 +64,7 @@ def get_total_quiz_results(room_id):
             "position": -1,
             "username": player["username"],
             "score": player["score"],
+            "sid": player["sid"]
         })
     
     # Update positions

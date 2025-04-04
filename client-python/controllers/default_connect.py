@@ -45,6 +45,10 @@ def init():
         round_results = data["round_results"]
         show_round_results(round_results)
     
+    @sio.on('showQuizResults')
+    def show_quiz_results(data):
+        pass
+    
     sio.connect('http://localhost:5100')
     
     wait_thread = threading.Thread(target=sio.wait)
