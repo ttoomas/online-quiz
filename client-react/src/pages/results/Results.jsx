@@ -9,6 +9,14 @@ import { useCookies } from "react-cookie";
 import { useSelector } from "react-redux";
 
 export default function Results() {
+    useEffect(() => {
+        document.body.style.backgroundColor = "rgb(245, 255, 247)"; // Nastavení barvy pozadí
+
+        return () => {
+            document.body.style.backgroundColor = ""; // Reset při opuštění stránky
+        };
+    }, []);
+  
     const [cookies, setCookie, deleteCookie] = useCookies(["quiz-token"]);    
     const quizResults = useSelector((state) => {
         console.log(state.quiz.quizResults)

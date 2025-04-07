@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useSocket } from "../../helpers/socketContext";
 
-
 export default function Question() {
     const navigate = useNavigate();
     const question = useSelector((state) => {
@@ -14,6 +13,14 @@ export default function Question() {
     const [timeLeft, setTimeLeft] = useState(0);
     const { socket } = useSocket();
 
+    useEffect(() => {
+        document.body.style.backgroundColor = "rgb(239, 248, 253)"; // Nastavení barvy pozadí
+
+        return () => {
+            document.body.style.backgroundColor = ""; // Reset při opuštění stránky
+        };
+    }, []);
+  
     const handlePost = (answerId) => {
         sendAnswer(answerId);
         navigate(`/wait`, { replace: true });

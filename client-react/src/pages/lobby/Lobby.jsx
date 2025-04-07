@@ -15,6 +15,13 @@ export default function Lobby() {
         return navigate(`/question`, { replace: true });
     };
 
+    useEffect(() => {
+        document.body.style.backgroundColor = "rgb(255, 243, 251)"; // Nastavení barvy pozadí
+
+        return () => {
+            document.body.style.backgroundColor = ""; // Reset při opuštění stránky
+        };
+    }, []);
     
     // Socket
     const { socket } = useSocket();

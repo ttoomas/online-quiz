@@ -1,5 +1,5 @@
 .uvodnistranka {
-   
+    
     display: flex;
     align-items: center;
     justify-content: center;
@@ -28,3 +28,9 @@ h3{
     border-color: rgb(105, 49, 93);
     
 }
+
+.wrong {
+    text-align: center;
+    color: rgb(180, 95, 155);
+}
+
