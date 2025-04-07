@@ -1,13 +1,14 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { CookiesProvider } from "react-cookie";
 import { SocketProvider } from "./helpers/socketMiddleware";
+import GlobalWrapper from "./helpers/GlobalWrapper";
 
 import MainPage from './pages/MainPage/MainPage';
 import Lobby from './pages/lobby/Lobby';
 import Question from './pages/Question/Question';
 import Wait from "./pages/wait/Wait";
+import RoundResults from "./pages/RoundResults/RoundResults";
 import Results from "./pages/results/Results";
-import Test from "./pages/test/test";
-import { CookiesProvider } from "react-cookie";
 
 
 function App() {
@@ -15,14 +16,16 @@ function App() {
         <Router>
             <CookiesProvider  defaultSetOptions={{ path: '/' }}>
                 <SocketProvider>
-                    <Routes>
-                        <Route path="/" element={<MainPage />} />
-                        <Route path="/lobby" element={<Lobby />} />
-                        <Route path="/question" element={<Question />} />
-                        <Route path="/wait" element={<Wait />} />
-                        <Route path="/results" element={<Results />} />
-                        <Route path="/test" element={<Test />} />
-                    </Routes>
+                    <GlobalWrapper>
+                        <Routes>
+                            <Route path="/" element={<MainPage />} />
+                            <Route path="/lobby" element={<Lobby />} />
+                            <Route path="/question" element={<Question />} />
+                            <Route path="/wait" element={<Wait />} />
+                            <Route path="/round-results" element={<RoundResults />} />
+                            <Route path="/results" element={<Results />} />
+                        </Routes>
+                    </GlobalWrapper>
                 </SocketProvider>
             </CookiesProvider>
         </Router>

@@ -1,4 +1,4 @@
 eventlet
 python-socketio
-uuid
 pyjwt
+mysql-connector-python

@@ -1,87 +1,46 @@
 import eventlet
-from helpers.socketio import sio, app, rooms
-from controllers.room import joinRoom, getRoomPlayers
+from helpers.socketio import sio, app
+from helpers.room_helper import rooms
+from controllers.room import joinRoom, getRoomPlayers, create_room
+from controllers.load import check_jwt_token, init_client
+from controllers.questions import start_questions_loop, send_answer
+from controllers.create_quiz import create_quiz_controller
+
 
 # SOCKET.IO EVENTS
 # GENERAL
 @sio.event
 def connect(sid, environ):
-    # TESTING
-    # Create room (will be created from the py frontend)
-    tempRoomId = "karel"
-    rooms[tempRoomId] = []
-    
     print('connect server')
-
-@sio.event
-def my_message(sid, data):
-    print('message ')
+    print(rooms)
 
 @sio.event
 def disconnect(sid):
     print('disconnect ')
-    
-    # sio.leave_room(sid, 'chat_users')
+    sio.leave_room(sid, 'chat_users')
+
+# Init client (player/admin)
+sio.on('initClient', init_client)
 
 # PLAYER
+sio.on('checkJwtToken', check_jwt_token)
+
 sio.on('joinRoom', joinRoom)
 sio.on('getRoomPlayers', getRoomPlayers)
 
+sio.on('sendAnswer', send_answer)
+
 # ADMIN
+sio.on("createRoom", create_room)
+sio.on("startQuiz", start_questions_loop)
 
-# TESTING
+sio.on("createQuiz", create_quiz_controller)
 
-@sio.on("createRoom")
-def createRoom(sid, data):
-    rooms[data["key"]] = []
-
-# # PLAYER
-# @sio.on("playerInit")
-# def playerInit(sid):
-#     print("Player connected")
-#     sio.save_session(sid, {"role": "player"})
-
-# @sio.on("connectToRoom")
-# def connectToRoom(sid, data):
-#     roomId = data["roomId"]
-#     userName = data["userName"]
-    
-#     # Check if room exists
-#     if roomId not in sio.manager.rooms.get("/"):
-#         print("Room does not exist")
-#         sio.emit("roomError", {"message": "Room does not exist"})
-
-#         return
-
-#     sio.enter_room(sid, roomId)
-
-#     # Update user name
-#     sio.save_session(sid, {"userName": userName})
-
-#     # Send waiting room to user
-#     print("Player connected to room: " + roomId)
-#     sio.emit("playerWaitingRoom")
-
-# # ADMIN
-# @sio.on("adminInit")
-# def adminInit(sid):
-#     print("Admin connected")
-#     sio.save_session(sid, {"role": "admin"})
-
-# @sio.on("createQuiz")
-# def createQuiz(sid, data):
-#     quizId = data["quizId"]
-
-#     # Check if quiz exists
-#     # TODO!: DB CHECK
-
-#     # Create room
-#     sio.enter_room(sid, quizId)
-    
-#     sio.emit("quizCreated")
-
-#     print("Quiz created with id: " + quizId)
-
-
+# RUN THE SERVER
 if __name__ == '__main__':
     eventlet.wsgi.server(eventlet.listen(('', 5100)), app)
+
+
+# from db.get_questions import get_quiz_questions
+# from db.quiz_list import get_quiz_list
+# from db.create_quiz import create_quiz

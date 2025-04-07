@@ -1,18 +1,18 @@
 import tkinter as tk
 from tkinter import messagebox
 from helpers import create_frame
+from controllers.default_connect import get_sio
 
-
-def create_quiz(root):
+def create_quiz(root, hide_create_quiz_handler):
     # Frame
     frame_data = create_frame(root, "")
     frame = frame_data["frame"]
 
-    activate_create_quiz(frame)
+    activate_create_quiz(frame, hide_create_quiz_handler)
 
     return frame_data
 
-def activate_create_quiz(root):
+def activate_create_quiz(root, hide_create_quiz_handler):
     for widget in root.winfo_children():
         widget.grid_forget()
 
@@ -41,9 +41,11 @@ def activate_create_quiz(root):
     quiz_title_entry = tk.Entry(scroll_frame, font=("Arial", 12), width=40)
     quiz_title_entry.pack(pady=10)
 
+    questions = []
+
     def create_question_section():
         # Vytvoření sekce pro otázky
-        question_index = len(scroll_frame.winfo_children()) // 2
+        question_index = len(questions) + 1
         question_label = tk.Label(scroll_frame, text=f"Otázka {question_index}", font=("Arial", 14))
         question_label.pack(pady=10)
         question_entry = tk.Entry(scroll_frame, font=("Arial", 12), width=40)
@@ -52,9 +54,11 @@ def activate_create_quiz(root):
         answer_frame = tk.Frame(scroll_frame)
         answer_frame.pack(pady=5)
 
+        answers = []
+
         def add_answer():
             # Funkce pro přidání odpovědí
-            answer_index = len(answer_frame.winfo_children()) + 1
+            answer_index = len(answers) + 1
             frame = tk.Frame(answer_frame)
             frame.pack(pady=2)
 
@@ -64,12 +68,17 @@ def activate_create_quiz(root):
 
             def mark_correct():
                 answer_entry.config(bg="lightgreen")
+                answers.append((answer_entry, True))
             def mark_incorrect():
                 answer_entry.config(bg="lightcoral")
+                answers.append((answer_entry, False))
 
             # Tlačítka pro označení správnosti odpovědi
             tk.Button(frame, text="Správná", bg="green", fg="white", command=mark_correct).pack(side="left", padx=2)
             tk.Button(frame, text="Špatná", bg="red", fg="white", command=mark_incorrect).pack(side="left", padx=2)
+
+            # Přidání odpovědi do seznamu odpovědí
+            answers.append((answer_entry, False))
 
         # Předdefinované odpovědi
         for _ in range(2):
@@ -78,8 +87,37 @@ def activate_create_quiz(root):
         # Tlačítko pro přidání další odpovědi
         tk.Button(scroll_frame, text="Přidat odpověď", command=add_answer).pack(pady=(10, 100))
 
+        questions.append((question_entry, answers))
+
     # Tlačítko pro přidání nové otázky
     tk.Button(scroll_frame, text="Vytvořit novou otázku", command=create_question_section).pack(pady=20)
 
+    def create_quiz():
+        quiz_title = quiz_title_entry.get()
+        quiz_data = {"title": quiz_title, "questions": []}
+
+        for question_entry, answers in questions:
+            question_text = question_entry.get()
+            question_data = {"question": question_text, "answers": []}
+            for answer_entry, is_correct in answers:
+                answer_text = answer_entry.get()
+                question_data["answers"].append({"answer": answer_text, "correct": is_correct})
+            quiz_data["questions"].append(question_data)
+
+        emit_create_quiz(quiz_data)
+        hide_create_quiz_handler()
+
     # Tlačítko pro vytvoření kvízu
-    tk.Button(scroll_frame, text="Vytvořit kvíz", command=lambda: messagebox.showinfo("Info", "Kvíz vytvořen")).pack(side="bottom", pady=75)
+    tk.Button(scroll_frame, text="Vytvořit kvíz", command=create_quiz).pack(side="bottom", pady=75)
+
+
+def emit_create_quiz(quiz_data):
+    sio = get_sio()
+    
+    sio.emit("createQuiz", {
+        "quiz_data": quiz_data
+    }, callback=update_quiz_list)
+
+def update_quiz_list(data):
+    new_quiz_name = data["name"]
+    new_quiz_uuid = data["uuid"]

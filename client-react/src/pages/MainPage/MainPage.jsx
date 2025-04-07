@@ -7,7 +7,6 @@ import { useSocket } from "../../helpers/socketContext";
 import { useCookies } from "react-cookie";
 
 export default function MainPage() {
-    // TODO! - on every connect, send token to server and check room id, if it exists, join room
     const [cookies, setCookie] = useCookies(["token"]);
     const { socket } = useSocket();
     
@@ -27,7 +26,7 @@ export default function MainPage() {
             };
         }, []);
 
-    const handlePost = (e) => {
+    const handlePost = async (e) => {
         e.preventDefault();
         
         if (formData["username"].length <= 2 || formData["roomId"].length <= 4 ) {
@@ -35,28 +34,22 @@ export default function MainPage() {
             return;
         }
         // Validate data
-        // TODO: pokud token je mene nez 4 znaky a prezdivka mene nez 2, hodi to error
-
         // Join socket room and redirect
-        const result = {
-            success: true
-        };
+        const result = await joinRoomSocket();
 
         if(!result.success){
             setIsError("*zadal jsi špatný token")
             
-            // TODO: pokud je token spatny, hodi to error
-            
             return;
         }
-        // else if(!result.jwt){
-        //     throw new Error("JWT token is missing");
-        // }
+        else if(!result.jwt){
+            throw new Error("JWT token is missing");
+        }
 
-        // // Set cookie
-        // setCookie("quiz-token", {
-        //     token: result.jwt
-        // });
+        // Set cookie
+        setCookie("quiz-token", {
+            token: result.jwt
+        });
         
         redirectTo();
     };
@@ -70,21 +63,18 @@ export default function MainPage() {
 
     }
 
-    function joinRoomSocket(){
-        socket.emit("joinRoom", {
-            roomId: formData.roomId,
-            username: formData.username
-        }, handleResponse)
-
-        function handleResponse(rsp){
-            if(!rsp.success){
-                // TODO: zobrazit spatny token
-
-                return;
+    async function joinRoomSocket(){
+        return new Promise((resolve, reject) => {
+            socket.emit("joinRoom", {
+                roomId: formData.roomId,
+                username: formData.username
+            }, handleResponse)
+    
+            function handleResponse(rsp){
+                console.log(rsp);
+                resolve(rsp);
             }
-
-            redirectTo();
-        }
+        })
     }
 
     useEffect(initLoadSocket, []);
