@@ -1,47 +1,46 @@
 import eventlet
-import socketio
+from helpers.socketio import sio, app
+from helpers.room_helper import rooms
+from controllers.room import joinRoom, getRoomPlayers, create_room
+from controllers.load import check_jwt_token, init_client
+from controllers.questions import start_questions_loop, send_answer
+from controllers.create_quiz import create_quiz_controller
 
-sio = socketio.Server(cors_allowed_origins='*')
-app = socketio.WSGIApp(sio, static_files={
-    '/': {'content_type': 'text/html', 'filename': 'index.html'}
-})
 
+# SOCKET.IO EVENTS
+# GENERAL
 @sio.event
 def connect(sid, environ):
-    # Create room (will be created from the py frontend)
-    tempRoomId = "kareljaromir123"
-    sio.enter_room(sid, tempRoomId)
-    
-    print('connect ')
-
-@sio.event
-def my_message(sid, data):
-    print('message ')
+    print('connect server')
+    print(rooms)
 
 @sio.event
 def disconnect(sid):
     print('disconnect ')
-    
-    # sio.leave_room(sid, 'chat_users')
+    sio.leave_room(sid, 'chat_users')
 
-@sio.on("connectToRoom")
-def roomConnect(sid, data):
-    roomId = data["roomId"]
-    userName = data["userName"]
-    
-    # Check if room exists
-    if not sio.rooms(sid).get(roomId):
-        sio.emit("roomError", {"message": "Room does not exist"})
+# Init client (player/admin)
+sio.on('initClient', init_client)
 
-        return
-    else:
-        sio.enter_room(sid, roomId)
+# PLAYER
+sio.on('checkJwtToken', check_jwt_token)
 
-    # Update user name
-    sio.save_session(sid, {"userName": userName})
+sio.on('joinRoom', joinRoom)
+sio.on('getRoomPlayers', getRoomPlayers)
 
-    # Send success message to user
+sio.on('sendAnswer', send_answer)
 
+# ADMIN
+sio.on("createRoom", create_room)
+sio.on("startQuiz", start_questions_loop)
 
+sio.on("createQuiz", create_quiz_controller)
+
+# RUN THE SERVER
 if __name__ == '__main__':
-    eventlet.wsgi.server(eventlet.listen(('', 5000)), app)
+    eventlet.wsgi.server(eventlet.listen(('', 5100)), app)
+
+
+# from db.get_questions import get_quiz_questions
+# from db.quiz_list import get_quiz_list
+# from db.create_quiz import create_quiz
