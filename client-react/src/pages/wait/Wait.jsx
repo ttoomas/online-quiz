@@ -14,14 +14,15 @@ export default function Wait() {
 
     const redirectTo = () => {
         return navigate(`/question`, { replace: true });
+    }
     
     useEffect(() => {
-    document.body.style.backgroundColor = "rgb(239, 248, 253)"; // Nastavení barvy pozadí
+        document.body.style.backgroundColor = "rgb(239, 248, 253)"; // Nastavení barvy pozadí
 
-    return () => {
-        document.body.style.backgroundColor = ""; // Reset při opuštění stránky
-    };
-}, []);
+        return () => {
+            document.body.style.backgroundColor = ""; // Reset při opuštění stránky
+        };
+    }, []);
 
     useEffect(() => {
         toast.current.show({ severity: 'success', summary: 'Odesláno!', detail: 'Vaše odpověd byla uložena.' });

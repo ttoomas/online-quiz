@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from helpers import create_frame
 from controllers.default_connect import get_sio
+from frames.home_frame import add_quiz
 
 def create_quiz(root, hide_create_quiz_handler):
     # Frame
@@ -121,3 +122,5 @@ def emit_create_quiz(quiz_data):
 def update_quiz_list(data):
     new_quiz_name = data["name"]
     new_quiz_uuid = data["uuid"]
+
+    add_quiz(new_quiz_name, new_quiz_uuid)

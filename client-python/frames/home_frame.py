@@ -61,13 +61,13 @@ def update_quiz_list(quiz_list):
         column = 1 if index % 2 == 0 else 3
 
         # Rámeček pro kvíz
-        frame = tk.Frame(root, bd=2, relief="solid", padx=10, pady=10)
-        frame.grid(row=row, column=column, padx=10, pady=10, sticky="nsew")
+        new_frame = tk.Frame(frame, bd=2, relief="solid", padx=10, pady=10)
+        new_frame.grid(row=row, column=column, padx=10, pady=10, sticky="nsew")
 
-        label_title = tk.Label(frame, text=quiz["name"], font=("Arial", 14, "bold"))
+        label_title = tk.Label(new_frame, text=quiz["name"], font=("Arial", 14, "bold"))
         label_title.pack(anchor="center")
 
-        link_button = tk.Button(frame, text=f"Spustit kvíz", fg="white", bg="black", bd=0, font=("Arial", 12),
+        link_button = tk.Button(new_frame, text=f"Spustit kvíz", fg="white", bg="black", bd=0, font=("Arial", 12),
                                 command=lambda q=quiz: show_waiting_handler_global(q["uuid"]))
         link_button.pack(side="bottom", anchor="center", pady=10)
 
@@ -84,17 +84,17 @@ def add_quiz(name, uuid):
     global show_waiting_handler_global
 
     root = frame
-    last_index = len(root.winfo_children())
+    last_index = len(root.winfo_children()) - 2
 
     row = 1 + (last_index // 2)
     column = 1 if last_index % 2 == 0 else 3
 
     # Rámeček pro kvíz
-    frame = tk.Frame(root, bd=2, relief="solid", padx=10, pady=10)
-    frame.grid(row=row, column=column, padx=10, pady=10, sticky="nsew")
+    new_frame = tk.Frame(root, bd=2, relief="solid", padx=10, pady=10)
+    new_frame.grid(row=row, column=column, padx=10, pady=10, sticky="nsew")
 
-    label_title = tk.Label(frame, text=name, font=("Arial", 14, "bold"))
+    label_title = tk.Label(new_frame, text=name, font=("Arial", 14, "bold"))
     label_title.pack(anchor="center")
 
-    link_button = tk.Button(frame, text=f"Spustit kvíz", fg="white", bg="black", bd=0, font=("Arial", 12), command=lambda: show_waiting_handler_global(uuid))
+    link_button = tk.Button(new_frame, text=f"Spustit kvíz", fg="white", bg="black", bd=0, font=("Arial", 12), command=lambda: show_waiting_handler_global(uuid))
     link_button.pack(side="bottom", anchor="center", pady=10)

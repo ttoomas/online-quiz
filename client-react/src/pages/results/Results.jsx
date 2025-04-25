@@ -2,7 +2,7 @@ import "./Results.css";
 import { useNavigate } from 'react-router-dom';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "primereact/button";
 import { FaMedal } from "react-icons/fa";
 import { useCookies } from "react-cookie";
